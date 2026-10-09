@@ -1,0 +1,9 @@
+{
+  "name": "manutencao-industrial-ld",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aplicativo offline para gestão de manutenção industrial",
+  "scripts": {"build": "echo 'Conteúdo web pronto para empacotamento Capacitor'"},
+  "dependencies": {"@capacitor/android": "^7.4.2", "@capacitor/core": "^7.4.2"},
+  "devDependencies": {"@capacitor/cli": "^7.4.2"}
+}
