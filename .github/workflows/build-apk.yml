@@ -15,6 +15,13 @@ jobs:
       - name: Baixar o projeto
         uses: actions/checkout@v4
 
+      - name: Extrair arquivos da V2
+        run: |
+          unzip -o ManutencaoIndustrialLD-V2.zip -d .
+          test -f www/index.html
+          test -f www/app.js
+          test -f package.json
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
@@ -29,7 +36,7 @@ jobs:
       - name: Criar projeto Android
         run: npx cap add android
 
-      - name: Sincronizar arquivos
+      - name: Sincronizar aplicativo
         run: npx cap sync android
 
       - name: Configurar Java
