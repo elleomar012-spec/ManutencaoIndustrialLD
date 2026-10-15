@@ -15,9 +15,9 @@ jobs:
       - name: Baixar o projeto
         uses: actions/checkout@v4
 
-      - name: Extrair arquivos da V2
+      - name: Extrair base V3 corrigida
         run: |
-          unzip -o ManutencaoIndustrialLD-V2.zip -d .
+          unzip -o ManutencaoIndustrialLD-V2-BASE-V3-CORRIGIDA.zip -d .
           test -f www/index.html
           test -f www/app.js
           test -f package.json
