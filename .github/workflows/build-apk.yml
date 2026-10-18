@@ -15,15 +15,31 @@ jobs:
       - name: Baixar arquivos da branch V2
         uses: actions/checkout@v4
 
+      
       - name: Conferir base V2
         run: |
-          test -f www/index.html
-          test -f www/app.js
-          test -f www/style.css
-          test -f www/assets/ld-logo-watermark.png
-          test -f package.json
-          test -f capacitor.config.json
-          grep -q 'br.com.ldautomacao.manutencaoindustrial.v2teste' capacitor.config.json
+          echo "Conferindo arquivos da V2.0..."
+          for arquivo in \
+            www/index.html \
+            www/app.js \
+            www/style.css \
+            www/assets/ld-logo-watermark.png \
+            package.json \
+            capacitor.config.json
+          do
+            if [ -f "$arquivo" ]; then
+              echo "OK: $arquivo"
+            else
+              echo "::error::ARQUIVO AUSENTE: $arquivo"
+              exit 1
+            fi
+          done
+          grep -q 'br.com.ldautomacao.manutencaoindustrial.v2teste' capacitor.config.json || {
+            echo "::error::Identificador Android da V2 incorreto"
+            exit 1
+          }
+          echo "Base V2 conferida com sucesso!"
+
 
       - name: Configurar Node
         uses: actions/setup-node@v4
