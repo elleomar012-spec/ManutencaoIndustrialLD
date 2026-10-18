@@ -1,76 +1,29 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#102238">
-  <title>Manutenção Industrial LD</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>Gestão Manutenção Industrial LD — V2.0</title>
+<link rel="stylesheet" href="style.css">
+<script src="vendor/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <header class="topo">
-    <div class="marca">LD</div>
-    <div>
-      <h1>Manutenção Industrial</h1>
-      <p>LD Automação</p>
-    </div>
-  </header>
-
-  <main>
-    <section class="boas-vindas">
-      <p class="subtitulo">GESTÃO DE MANUTENÇÃO</p>
-      <h2>Olá! Vamos trabalhar?</h2>
-      <p>Controle seus equipamentos e serviços em um só lugar.</p>
-    </section>
-
-    <section class="resumo">
-      <article class="cartao">
-        <span>Equipamentos</span>
-        <strong id="totalEquipamentos">0</strong>
-      </article>
-      <article class="cartao">
-        <span>Ordens abertas</span>
-        <strong id="ordensAbertas">0</strong>
-      </article>
-      <article class="cartao">
-        <span>Equipamentos parados</span>
-        <strong id="equipamentosParados">0</strong>
-      </article>
-    </section>
-
-    <section class="painel">
-      <h2>Cadastrar equipamento</h2>
-      <form id="formEquipamento">
-        <label for="nome">Nome do equipamento</label>
-        <input id="nome" required placeholder="Ex.: Masseira industrial">
-
-        <label for="identificacao">Código ou identificação</label>
-        <input id="identificacao" placeholder="Ex.: MAS-001">
-
-        <label for="setor">Setor ou localização</label>
-        <input id="setor" placeholder="Ex.: Produção">
-
-        <label for="status">Situação</label>
-        <select id="status">
-          <option value="Operacional">Operacional</option>
-          <option value="Em manutenção">Em manutenção</option>
-          <option value="Parado">Parado</option>
-        </select>
-
-        <button type="submit">Salvar equipamento</button>
-      </form>
-    </section>
-
-    <section class="painel">
-      <h2>Equipamentos cadastrados</h2>
-      <div id="listaEquipamentos">
-        <p class="vazio">Nenhum equipamento cadastrado ainda.</p>
-      </div>
-    </section>
-  </main>
-
-  <footer>Manutenção Industrial LD · Versão inicial</footer>
-  <script src="app.js"></script>
+<header class="top">
+  <div class="brandmark">LD</div>
+  <div><div class="eyebrow">LD AUTOMAÇÃO</div><h1>Gestão Manutenção Industrial <span class="version">V2.0</span></h1><p>Transformando Energia em Resultados</p></div>
+</header>
+<nav class="tabs" aria-label="Navegação principal">
+  <button class="tab active" data-view="dashboard"><span class="nav-icon">▦</span><span>Painel</span></button>
+  <button class="tab" data-view="assets"><span class="nav-icon">⚙</span><span>Equipamentos</span></button>
+  <button class="tab" data-view="orders"><span class="nav-icon">▤</span><span>OS</span></button>
+  <button class="tab" data-view="calendar"><span class="nav-icon">▦</span><span>Agenda</span></button>
+  <button class="tab" data-view="reports"><span class="nav-icon">▥</span><span>Relatórios</span></button>
+  <button class="tab" data-view="settings"><span class="nav-icon">☷</span><span>Ajustes</span></button>
+</nav>
+<main id="app" class="content"></main>
+<footer><span>LD AUTOMAÇÃO</span><span>Dados locais · faça backup antes de desinstalar</span></footer>
+<dialog id="modal"><form method="dialog" id="modalForm"><div id="modalBody"></div><div class="modal-actions"><button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button></div></form></dialog>
+<script src="app.js"></script>
 </body>
 </html>
