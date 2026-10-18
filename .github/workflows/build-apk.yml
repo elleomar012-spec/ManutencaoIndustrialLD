@@ -1,11 +1,10 @@
 
-name: Build Manutenção Industrial LD APK
+name: Build Manutenção Industrial LD V2 TESTE
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - main
       - v2.0
 
 jobs:
@@ -13,25 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar o projeto
+      - name: Baixar arquivos da branch V2
         uses: actions/checkout@v4
 
-      - name: Extrair base V3 corrigida
+      - name: Conferir base V2
         run: |
-          unzip -o ManutencaoIndustrialLD-V2-BASE-V3-CORRIGIDA.zip -d .
           test -f www/index.html
           test -f www/app.js
+          test -f www/style.css
+          test -f www/assets/ld-logo-watermark.png
           test -f package.json
+          test -f capacitor.config.json
+          grep -q 'br.com.ldautomacao.manutencaoindustrial.v2teste' capacitor.config.json
 
-      - name: Configurar Node.js
+      - name: Configurar Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
-      - name: Instalar dependências
+      - name: Instalar dependencias
         run: npm install
 
-      - name: Preparar aplicativo
+      - name: Preparar biblioteca de PDF
         run: npm run build
 
       - name: Criar projeto Android
@@ -44,7 +46,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: '21'
 
       - name: Compilar APK
         run: |
@@ -52,9 +54,10 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Disponibilizar APK
+      - name: Disponibilizar APK V2
         uses: actions/upload-artifact@v4
         with:
-          name: manutencao-industrial-ld-apk
+          name: manutencao-industrial-ld-v2-teste-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+ 
