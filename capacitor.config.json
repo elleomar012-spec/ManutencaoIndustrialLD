@@ -1,6 +1,6 @@
 {
-  "appId": "br.com.ldautomacao.manutencaoindustrial",
-  "appName": "Manutenção Industrial LD",
+  "appId": "br.com.ldautomacao.manutencaoindustrial.v2teste",
+  "appName": "Manutenção LD V2 Teste",
   "webDir": "www",
   "bundledWebRuntime": false
 }
