@@ -40,3 +40,9 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .agenda-row p{margin-top:5px}
 .report-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 @media(max-width:390px){.tab{font-size:9px}.nav-icon{font-size:17px}.top{padding:13px}.top .brandmark{width:43px;height:43px}}
+
+/* V2.1 — Ficha técnica e cadastro em etapas */
+.wizard-progress{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin:12px 0}.wizard-progress strong{color:var(--green);font-size:14px}
+.wizard-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:0 0 15px}.wizard-steps span{border:1px solid var(--line);border-radius:9px;padding:9px 5px;text-align:center;font-size:10px;color:var(--muted)}.wizard-steps .current{background:#17392d;border-color:var(--green);color:var(--green);font-weight:800}.wizard-steps .done{color:var(--text);border-color:#3b8b6b}
+.modal-actions [hidden]{display:none!important}.detail-heading{display:flex;justify-content:space-between;gap:10px;align-items:center}.detail-section{border:1px solid var(--line);border-radius:12px;padding:12px;margin:14px 0;background:#0d1928}.detail-section h3{color:var(--green);margin-bottom:12px}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.detail-item{display:grid;gap:4px;min-width:0}.detail-item span{font-size:11px;color:var(--muted)}.detail-item strong{font-size:13px;overflow-wrap:anywhere}.detail-notes{margin-top:14px;white-space:pre-wrap;overflow-wrap:anywhere}.detail-section .history-item p{white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:430px){.detail-grid{grid-template-columns:1fr}.wizard-steps span{font-size:9px}}
