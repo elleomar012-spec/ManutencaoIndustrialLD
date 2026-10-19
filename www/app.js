@@ -48,13 +48,28 @@ function dashboard(){
   <div class="toolbar"><button class="btn secondary" data-action="backup">Exportar backup</button><button class="btn secondary" data-action="restore">Importar backup</button><button class="btn secondary" data-action="tech-signature">Assinatura do técnico</button></div>
   <div class="note">Os dados são guardados neste aparelho. Exporte um backup regularmente, principalmente antes de atualizar ou reinstalar o aplicativo.</div>`;
 }
+function maintenanceSummary(a){
+ const preventive=state.orders.filter(o=>o.assetId===a.id&&o.type==="Preventiva"&&o.status==="Concluída").sort((x,y)=>(y.serviceDate||y.created||"").localeCompare(x.serviceDate||x.created||""));
+ return preventive[0]?.serviceDate||a.lastMaintenance||"";
+}
+function assetDetail(a){
+ if(!a)return;
+ const list=state.orders.filter(o=>o.assetId===a.id).sort((x,y)=>(y.serviceDate||y.created||"").localeCompare(x.serviceDate||x.created||""));
+ const item=(label,value)=>`<div class="detail-item"><span>${label}</span><strong>${esc(value||"—")}</strong></div>`;
+ openModal("Ficha técnica do equipamento",`<div class="detail-heading"><h3>${esc(a.name)}</h3>${pill(a.status)}</div>
+ <div class="detail-section"><h3>Identificação</h3><div class="detail-grid">${item("Código",a.code||a.id)}${item("Cliente / unidade",a.client)}${item("Setor / localização",a.sector)}${item("Fabricante / marca",a.brand)}${item("Modelo",a.model)}${item("Número de série",a.serialNumber)}</div></div>
+ <div class="detail-section"><h3>Dados técnicos</h3><div class="detail-grid">${item("Tensão nominal",a.voltage)}${item("Potência nominal",a.power)}${item("Corrente nominal",a.current)}${item("Data de instalação",fmtDate(a.installationDate))}</div><p class="detail-notes"><b>Observações:</b> ${esc(a.notes||"—")}</p></div>
+ <div class="detail-section"><h3>Plano preventivo</h3><div class="detail-grid">${item("Periodicidade",a.frequency)}${item("Última preventiva",fmtDate(maintenanceSummary(a)))}${item("Próxima manutenção",fmtDate(a.nextMaintenance))}</div></div>
+ <div class="detail-section"><h3>Histórico de manutenções (${list.length})</h3>${list.length?list.map(o=>`<div class="history-item"><b>${fmtDate(o.serviceDate||o.created)} · ${esc(o.type||"Manutenção")} · ${esc(o.id)}</b><p>${esc(o.service||"—")}</p><p class="mini">Técnico: ${esc(o.technician||"—")}</p><div class="actions"><button type="button" class="btn secondary" data-action="view-order" data-id="${esc(o.id)}">Detalhes</button><button type="button" class="btn secondary" data-action="pdf" data-id="${esc(o.id)}">PDF</button></div></div>`).join(""):`<div class="empty">Nenhuma manutenção registrada para esta máquina.</div>`}</div>
+ <div class="actions"><button type="button" class="btn primary" data-action="asset-new-order" data-id="${esc(a.id)}">+ Nova OS</button><button type="button" class="btn secondary" data-action="asset-edit" data-id="${esc(a.id)}">Editar ficha</button></div>`,null);
+}
 function assetsView(){
   const list=[...state.assets].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"pt-BR",{sensitivity:"base"})).filter(a=>([a.name,a.code,a.client,a.sector,a.brand,a.model].join(" ").toLowerCase().includes(query.toLowerCase()))&&(filter==="Todos"||a.status===filter));
   return `<div class="section-head"><div><h2>Equipamentos</h2><div class="sub">Cadastre uma máquina uma vez e reutilize nas próximas visitas</div></div><button class="btn primary" data-action="new-asset">+ Cadastrar equipamento</button></div>
   <div class="list-head"><input id="search" placeholder="Buscar por nome, código ou cliente..." value="${esc(query)}"><select id="filter"><option>Todos</option>${["Em operação","Em manutenção","Parado","Aguardando peças","Desativado"].map(s=>`<option ${filter===s?"selected":""}>${s}</option>`).join("")}</select></div>
   ${list.length?`<div class="cards">${list.map(a=>`<article class="card"><div class="card-top"><div><h3>${esc(a.name)}</h3><div class="sub">${esc(a.code||a.id)} · ${esc(a.client||"Cliente não informado")}</div></div>${pill(a.status)}</div>
   <p>Setor: ${esc(a.sector||"—")}<br>Marca/modelo: ${esc([a.brand,a.model].filter(Boolean).join(" / ")||"—")}<br>Próxima manutenção: ${fmtDate(a.nextMaintenance)}</p>
-  <div class="actions"><button class="btn primary" data-action="new-order" data-id="${esc(a.id)}">Nova manutenção</button><button class="btn secondary" data-action="asset-history" data-id="${esc(a.id)}">Histórico</button><button class="btn secondary" data-action="edit-asset" data-id="${esc(a.id)}">Editar</button></div></article>`).join("")}</div>`:`<div class="empty">Nenhum equipamento encontrado.</div>`}`;
+  <div class="actions"><button class="btn primary" data-action="new-order" data-id="${esc(a.id)}">Nova manutenção</button><button class="btn secondary" data-action="asset-detail" data-id="${esc(a.id)}">Ficha técnica</button><button class="btn secondary" data-action="edit-asset" data-id="${esc(a.id)}">Editar</button></div></article>`).join("")}</div>`:`<div class="empty">Nenhum equipamento encontrado.</div>`}`;
 }
 function orderCard(o){
   return `<article class="card"><div class="card-top"><div><h3>${esc(o.id)} · ${esc(o.type||"Manutenção")}</h3><div class="sub">${esc(orderAsset(o))} · ${fmtDate(o.serviceDate||o.created)}</div></div>${pill(o.status||"Concluída")}</div>
@@ -89,8 +104,8 @@ function settingsView(){
 function field(label,name,value="",type="text",extra=""){return `<div class="field"><label for="f_${name}">${label}</label><input id="f_${name}" name="${name}" type="${type}" value="${esc(value)}" ${extra}></div>`;}
 function selectField(label,name,options,value){return `<div class="field"><label for="f_${name}">${label}</label><select id="f_${name}" name="${name}">${options.map(o=>`<option ${o===value?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`;}
 function textarea(label,name,value=""){return `<div class="field"><label for="f_${name}">${label}</label><textarea id="f_${name}" name="${name}">${esc(value)}</textarea></div>`;}
-function openModal(title,html,handler){document.getElementById("modalBody").innerHTML=`<h2>${title}</h2>${html}`;modalHandler=handler;pads={};document.getElementById("modal").showModal();bindModalActions();}
-function bindModalActions(){document.querySelectorAll("#modal [data-action]").forEach(b=>b.addEventListener("click",()=>{const action=b.dataset.action,id=b.dataset.id;if(action==="clear-pad")clearPad(b.dataset.pad);if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id));if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));}));}
+function openModal(title,html,handler){document.querySelector("#modal .modal-actions").innerHTML=`<button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button>`;document.getElementById("modalBody").innerHTML=`<h2>${title}</h2>${html}`;modalHandler=handler;pads={};document.getElementById("modal").showModal();bindModalActions();}
+function bindModalActions(){document.querySelectorAll("#modal [data-action]").forEach(b=>b.addEventListener("click",()=>{const action=b.dataset.action,id=b.dataset.id;if(action==="clear-pad")clearPad(b.dataset.pad);if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id));if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="asset-edit")newAsset(assetById(id));if(action==="asset-new-order"){document.getElementById("modal").close();newOrder(id);}}));}
 async function scheduleReminder(asset){
   const plugin=window.Capacitor?.Plugins?.LocalNotifications;
   if(!plugin||!asset?.nextMaintenance||asset.status==="Desativado")return;
@@ -107,20 +122,46 @@ async function scheduleReminder(asset){
   }catch(e){console.warn("Lembrete local não pôde ser agendado.",e);}
 }
 function newAsset(a){
-  const editing=!!a;
-  openModal(editing?"Editar equipamento":"Cadastrar equipamento",`${field("Nome do equipamento *","name",a?.name||"")}
-  <div class="grid2">${field("Código / identificação","code",a?.code||"")}${field("Cliente / unidade","client",a?.client||"")}</div>
-  <div class="grid2">${field("Setor / localização","sector",a?.sector||"")}${field("Próxima manutenção","nextMaintenance",a?.nextMaintenance||"","date")}</div>
-  <div class="grid2">${field("Marca","brand",a?.brand||"")}${field("Modelo","model",a?.model||"")}</div>
-  ${selectField("Situação atual","status",["Em operação","Em manutenção","Parado","Aguardando peças","Desativado"],a?.status||"Em operação")}
-  ${textarea("Observações do equipamento","notes",a?.notes||"")}`,fd=>{
-    const name=fd.get("name").trim();if(!name)throw Error("Informe o nome do equipamento.");
-    const code=(fd.get("code")||"").trim()||a?.code||nextId("EQ","nextAsset");
-    if(state.assets.some(x=>x.code===code&&x.id!==a?.id))throw Error("Já existe equipamento com esse código.");
-    const obj={...(a||{}),id:a?.id||("asset-"+Date.now()+"-"+Math.random().toString(16).slice(2)),code,name,client:fd.get("client"),sector:fd.get("sector"),nextMaintenance:fd.get("nextMaintenance"),brand:fd.get("brand"),model:fd.get("model"),status:fd.get("status"),notes:fd.get("notes"),created:a?.created||new Date().toISOString()};
-    if(editing)state.assets=state.assets.map(x=>x.id===a.id?obj:x);else state.assets.push(obj);
-    if(saveState()){render();scheduleReminder(obj);}
-  });
+ const editing=!!a,modal=document.getElementById("modal"),save=document.getElementById("modalSave");
+ const steps=[
+ `<div class="grid2">${field("Nome do equipamento *","name",a?.name||"")}${field("Código / identificação","code",a?.code||"")}</div>
+ <div class="grid2">${field("Cliente / unidade","client",a?.client||"")}${field("Setor / localização","sector",a?.sector||"")}</div>
+ <div class="grid2">${field("Fabricante / marca","brand",a?.brand||"")}${field("Modelo","model",a?.model||"")}</div>`,
+ `<div class="grid2">${field("Número de série","serialNumber",a?.serialNumber||"")}${field("Data de instalação","installationDate",a?.installationDate||"","date")}</div>
+ <div class="grid2">${field("Tensão nominal (ex.: 380 V)","voltage",a?.voltage||"")}${field("Potência nominal (ex.: 7,5 cv)","power",a?.power||"")}</div>
+ ${field("Corrente nominal (ex.: 14 A)","current",a?.current||"")}${textarea("Observações técnicas","notes",a?.notes||"")}`,
+ `<div class="grid2">${selectField("Periodicidade preventiva","frequency",["Não definida","Mensal","Bimestral","Trimestral","Semestral","Anual","Personalizada"],a?.frequency||"Não definida")}${field("Última manutenção preventiva","lastMaintenance",a?.lastMaintenance||"","date")}</div>
+ ${field("Próxima manutenção","nextMaintenance",a?.nextMaintenance||"","date")}
+ ${selectField("Situação atual","status",["Em operação","Em manutenção","Parado","Aguardando peças","Desativado"],a?.status||"Em operação")}`
+ ];
+ const names=["Identificação","Dados técnicos","Plano preventivo"];
+ let step=0;const values={};
+ openModal(editing?"Editar ficha técnica":"Cadastrar equipamento",`<div id="assetWizard"></div>`,null);
+ const form=document.getElementById("modalForm");
+ const oldActions=form.querySelector(".modal-actions");
+ oldActions.innerHTML=`<button type="button" class="btn secondary" id="wizardCancel">Cancelar</button><button type="button" class="btn secondary" id="wizardBack">Voltar</button><button type="button" class="btn primary" id="wizardNext">Avançar</button><button type="submit" class="btn primary" id="wizardSave">Salvar equipamento</button>`;
+ const collect=()=>{new FormData(form).forEach((v,k)=>{values[k]=String(v);});};
+ const show=()=>{document.getElementById("assetWizard").innerHTML=`<div class="wizard-progress"><span>Etapa ${step+1} de 3</span><strong>${names[step]}</strong></div><div class="wizard-steps">${names.map((n,i)=>`<span class="${i===step?"current":i<step?"done":""}">${i+1}. ${n}</span>`).join("")}</div>${steps[step]}`;
+ document.getElementById("wizardBack").hidden=step===0;document.getElementById("wizardNext").hidden=step===2;document.getElementById("wizardSave").hidden=step!==2;
+ document.querySelectorAll("#assetWizard [name]").forEach(el=>{if(Object.prototype.hasOwnProperty.call(values,el.name))el.value=values[el.name];});
+ modal.scrollTop=0;};
+ const validFirst=()=>{if(step===0&&!String(form.elements.name?.value||"").trim()){alert("Informe o nome do equipamento.");form.elements.name?.focus();return false;}return true;};
+ document.getElementById("wizardCancel").onclick=()=>modal.close();
+ document.getElementById("wizardBack").onclick=()=>{collect();step=Math.max(0,step-1);show();};
+ document.getElementById("wizardNext").onclick=()=>{if(!validFirst())return;collect();step=Math.min(2,step+1);show();};
+ modalHandler=()=>{
+  collect();const name=String(values.name||"").trim();if(!name)throw Error("Informe o nome do equipamento.");
+  const code=String(values.code||"").trim()||a?.code||"EQ-"+String(state.nextAsset||1).padStart(3,"0");
+  if(state.assets.some(x=>x.code===code&&x.id!==a?.id))throw Error("Já existe equipamento com esse código.");
+  const obj={...(a||{}),id:a?.id||("asset-"+Date.now()+"-"+Math.random().toString(16).slice(2)),code,name,
+  client:values.client||"",sector:values.sector||"",brand:values.brand||"",model:values.model||"",serialNumber:values.serialNumber||"",installationDate:values.installationDate||"",voltage:values.voltage||"",power:values.power||"",current:values.current||"",notes:values.notes||"",frequency:values.frequency||"Não definida",lastMaintenance:values.lastMaintenance||"",nextMaintenance:values.nextMaintenance||"",status:values.status||"Em operação",created:a?.created||new Date().toISOString()};
+  const previous=state.assets,previousNext=state.nextAsset;
+  if(editing)state.assets=state.assets.map(x=>x.id===a.id?obj:x);else{state.assets.push(obj);if(!values.code?.trim())state.nextAsset=Number(state.nextAsset||1)+1;}
+  if(!saveState()){state.assets=previous;state.nextAsset=previousNext;throw Error("Não foi possível salvar o equipamento.");}
+  scheduleReminder(obj);
+ };
+ const reset=()=>{oldActions.innerHTML=`<button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button>`;};
+ modal.addEventListener("close",reset,{once:true});show();
 }
 function photoFields(which,label){
   return `<div class="photo-box"><b>${label}</b><div class="field"><label>Escolher da galeria</label><input type="file" name="${which}Gallery" accept="image/*"></div><div class="field"><label>Tirar foto agora</label><input type="file" name="${which}Camera" accept="image/*" capture="environment"></div><img id="preview_${which}" class="preview hidden" alt="Prévia da foto"></div>`;
@@ -287,7 +328,7 @@ function bind(){
   document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;query="";filter="Todos";render();}));
   document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{
     const action=b.dataset.action,id=b.dataset.id;
-    if(action==="new-asset")newAsset();if(action==="edit-asset")newAsset(assetById(id));if(action==="new-order")newOrder(id||"");if(action==="asset-history")assetHistory(assetById(id));
+    if(action==="asset-detail")assetDetail(assetById(id));if(action==="new-asset")newAsset();if(action==="edit-asset")newAsset(assetById(id));if(action==="new-order")newOrder(id||"");if(action==="asset-history")assetHistory(assetById(id));
     if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id));
     if(action==="tech-signature")techSignature();if(action==="backup")exportBackup();if(action==="restore")importBackup();
     if(action==="clear-pad")clearPad(b.dataset.pad);
@@ -297,7 +338,7 @@ function bind(){
   if(f)f.addEventListener("change",()=>{filter=f.value;render();});
 }
 document.getElementById("modalForm").addEventListener("submit",async e=>{
-  if(!modalHandler)return;e.preventDefault();
+  e.preventDefault();if(!modalHandler)return;
   try{const handler=modalHandler;await handler(new FormData(e.currentTarget));if(document.getElementById("modal").open){document.getElementById("modal").close();modalHandler=null;render();}}
   catch(err){console.error(err);alert(err.message||"Não foi possível salvar os dados.");}
 });
