@@ -55,6 +55,33 @@ jobs:
       - name: Criar projeto Android
         run: npx cap add android
 
+      - name: Aplicar icone oficial LD
+        run: |
+          python3 - <<'PY'
+          from PIL import Image
+          import os
+
+          origem = "www/assets/icon-ld-v22.png"
+          imagem = Image.open(origem).convert("RGBA")
+
+          tamanhos = {
+              "mipmap-mdpi": 48,
+              "mipmap-hdpi": 72,
+              "mipmap-xhdpi": 96,
+              "mipmap-xxhdpi": 144,
+              "mipmap-xxxhdpi": 192
+          }
+
+          for pasta, tamanho in tamanhos.items():
+              destino = f"android/app/src/main/res/{pasta}"
+              os.makedirs(destino, exist_ok=True)
+              icone = imagem.resize((tamanho, tamanho), Image.Resampling.LANCZOS)
+              icone.save(f"{destino}/ic_launcher.png")
+              icone.save(f"{destino}/ic_launcher_round.png")
+
+          print("Icone oficial LD aplicado com sucesso!")
+          PY
+
       - name: Sincronizar aplicativo
         run: npx cap sync android
 
