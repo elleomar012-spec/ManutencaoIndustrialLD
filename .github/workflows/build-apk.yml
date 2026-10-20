@@ -55,8 +55,9 @@ jobs:
       - name: Criar projeto Android
         run: npx cap add android
 
-      - name: Aplicar icone oficial LD
+            - name: Aplicar icone oficial LD
         run: |
+          python3 -m pip install --user Pillow
           python3 - <<'PY'
           from PIL import Image
           import os
