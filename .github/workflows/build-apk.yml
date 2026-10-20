@@ -80,7 +80,7 @@ jobs:
               icone.save(f"{destino}/ic_launcher.png")
               icone.save(f"{destino}/ic_launcher_round.png")
 
-                        # Remover os icones adaptativos padrao do Capacitor.
+          # Remover os icones adaptativos padrao do Capacitor.
           # Assim, o Android utiliza os PNGs oficiais gerados acima.
           pasta_adaptativa = "android/app/src/main/res/mipmap-anydpi-v26"
 
