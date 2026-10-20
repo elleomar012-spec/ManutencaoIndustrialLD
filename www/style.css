@@ -1,7 +1,8 @@
 :root{--bg:#0b1220;--panel:#121e30;--panel2:#17263b;--line:#293b52;--text:#edf4fb;--muted:#9aacc0;--green:#42d392;--yellow:#f6c65b;--red:#ff7272;--blue:#6fb6ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:14px}
 .top{display:flex;align-items:center;gap:14px;padding:18px 16px;background:linear-gradient(135deg,#14263b,#0e1726);border-bottom:1px solid var(--line)}
-.brandmark{display:grid;place-items:center;flex:none;width:52px;height:52px;border-radius:15px;background:var(--green);color:#082016;font-size:22px;font-weight:900;letter-spacing:-2px}
+.brandmark{display:grid;place-items:center;flex:none;width:52px;height:52px;border-radius:15px;background:#101b29;overflow:hidden}
+.brandmark img{display:block;width:100%;height:100%;object-fit:contain}
 .eyebrow{color:var(--green);font-size:10px;font-weight:800;letter-spacing:2px}h1{font-size:19px;line-height:1.2;margin:3px 0 5px}p{margin:0;color:var(--muted)}
 .tabs{display:flex;overflow-x:auto;gap:6px;padding:10px;background:#0e1827;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
 .tab{white-space:nowrap;background:transparent;color:var(--muted);border:1px solid transparent;border-radius:10px;padding:10px 12px;font-weight:700}.tab.active{color:var(--green);background:#173126;border-color:#285c47}
