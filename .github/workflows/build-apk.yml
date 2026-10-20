@@ -80,6 +80,15 @@ jobs:
               icone.save(f"{destino}/ic_launcher.png")
               icone.save(f"{destino}/ic_launcher_round.png")
 
+                        # Remover os icones adaptativos padrao do Capacitor.
+          # Assim, o Android utiliza os PNGs oficiais gerados acima.
+          pasta_adaptativa = "android/app/src/main/res/mipmap-anydpi-v26"
+
+          for nome in ("ic_launcher.xml", "ic_launcher_round.xml"):
+              caminho = os.path.join(pasta_adaptativa, nome)
+              if os.path.exists(caminho):
+                  os.remove(caminho)
+
           print("Icone oficial LD aplicado com sucesso!")
           PY
 
