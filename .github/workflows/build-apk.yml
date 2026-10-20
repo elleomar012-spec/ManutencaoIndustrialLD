@@ -78,8 +78,7 @@ jobs:
               os.makedirs(destino, exist_ok=True)
               icone = imagem.resize((tamanho, tamanho), Image.Resampling.LANCZOS)
               icone.save(f"{destino}/ic_launcher.png")
-              icone.save(f"{destino}/ic_launcher_round.png") 
-              icone.save(f"{destino}/ic_launcher_foreground.png")
+              icone.save(f"{destino}/ic_launcher_round.png")
 
           print("Icone oficial LD aplicado com sucesso!")
           PY
