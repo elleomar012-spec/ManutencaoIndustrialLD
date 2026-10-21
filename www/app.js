@@ -318,8 +318,54 @@ async function generatePdf(o){
     }
   }catch(e){console.error(e);alert("Não foi possível gerar/compartilhar o PDF. Confira se a versão instalada foi compilada com os plugins atualizados.");}
 }
-function exportBackup(){
-  const blob=new Blob([JSON.stringify({app:"Manutenção Industrial LD",version:3,exportedAt:new Date().toISOString(),state},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="backup-manutencao-industrial-ld.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+
+async function exportBackup(){
+  const nome = "backup-manutencao-industrial-ld.json";
+  const conteudo = JSON.stringify({
+    app: "Manutenção Industrial LD",
+    version: 3,
+    exportedAt: new Date().toISOString(),
+    state
+  }, null, 2);
+
+  try {
+    const capacitor = window.Capacitor;
+    const filesystem = capacitor?.Plugins?.Filesystem;
+    const share = capacitor?.Plugins?.Share;
+
+    if (capacitor?.isNativePlatform?.() && filesystem && share) {
+      const arquivo = await filesystem.writeFile({
+        path: nome,
+        data: conteudo,
+        directory: "CACHE",
+        encoding: "utf8"
+      });
+
+      await share.share({
+        title: "Backup Manutenção Industrial LD",
+        text: "Arquivo de backup do aplicativo.",
+        url: arquivo.uri,
+        dialogTitle: "Salvar ou compartilhar backup"
+      });
+
+      return;
+    }
+
+    // Alternativa para uso pelo navegador.
+    const blob = new Blob([conteudo], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  } catch (erro) {
+    console.error("Falha ao exportar backup:", erro);
+    alert("Não foi possível exportar o backup. Tente novamente.");
+  }
 }
 function importBackup(){
   const input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=()=>{const f=input.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result),s=d.state||d;if(!Array.isArray(s.assets)||!Array.isArray(s.orders))throw Error();if(confirm("Importar backup e substituir os dados atuais deste aparelho?")){state={...structuredClone(DEFAULT),...s,settings:{...DEFAULT.settings,...(s.settings||{})}};saveState();render();alert("Backup importado com sucesso.");}}catch(e){alert("Arquivo de backup inválido.");}};r.readAsText(f);};input.click();
