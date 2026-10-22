@@ -1,4 +1,5 @@
 
+
 name: Build Manutenção Industrial LD V2 TESTE
 
 on:
@@ -15,7 +16,6 @@ jobs:
       - name: Baixar arquivos da branch V2
         uses: actions/checkout@v4
 
-      
       - name: Conferir base V2
         run: |
           echo "Conferindo arquivos da V2.0..."
@@ -24,6 +24,7 @@ jobs:
             www/app.js \
             www/style.css \
             www/assets/ld-logo-watermark.png \
+            www/assets/icon-ld-v22.png \
             package.json \
             capacitor.config.json
           do
@@ -34,12 +35,13 @@ jobs:
               exit 1
             fi
           done
+
           grep -q 'br.com.ldautomacao.manutencaoindustrial.v2teste' capacitor.config.json || {
             echo "::error::Identificador Android da V2 incorreto"
             exit 1
           }
-          echo "Base V2 conferida com sucesso!"
 
+          echo "Base V2 conferida com sucesso!"
 
       - name: Configurar Node
         uses: actions/setup-node@v4
@@ -76,12 +78,13 @@ jobs:
           for pasta, tamanho in tamanhos.items():
               destino = f"android/app/src/main/res/{pasta}"
               os.makedirs(destino, exist_ok=True)
-              icone = imagem.resize((tamanho, tamanho), Image.Resampling.LANCZOS)
+              icone = imagem.resize(
+                  (tamanho, tamanho),
+                  Image.Resampling.LANCZOS
+              )
               icone.save(f"{destino}/ic_launcher.png")
               icone.save(f"{destino}/ic_launcher_round.png")
 
-          # Remover os icones adaptativos padrao do Capacitor.
-          # Assim, o Android utiliza os PNGs oficiais gerados acima.
           pasta_adaptativa = "android/app/src/main/res/mipmap-anydpi-v26"
 
           for nome in ("ic_launcher.xml", "ic_launcher_round.xml"):
@@ -101,15 +104,82 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Compilar APK
+      - name: Restaurar chave digital privada
+        env:
+          LD_KEYSTORE_BASE64: ${{ secrets.LD_KEYSTORE_BASE64 }}
+        run: |
+          set -e
+          printf '%s' "$LD_KEYSTORE_BASE64" | base64 --decode > android/app/ld-release.jks
+          test -s android/app/ld-release.jks
+          echo "Arquivo de assinatura restaurado."
+
+      - name: Configurar assinatura e versao Android
+        env:
+          LD_KEYSTORE_PASSWORD: ${{ secrets.LD_KEYSTORE_PASSWORD }}
+          LD_KEY_ALIAS: ${{ secrets.LD_KEY_ALIAS }}
+          LD_KEY_PASSWORD: ${{ secrets.LD_KEY_PASSWORD }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          set -e
+
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          caminho = Path("android/app/build.gradle")
+          conteudo = caminho.read_text()
+
+          versao = 100 + int(os.environ["BUILD_NUMBER"])
+
+          conteudo, alteracoes = re.subn(
+              r'\bversionCode\s+\d+',
+              f'versionCode {versao}',
+              conteudo,
+              count=1
+          )
+
+          if alteracoes != 1:
+              raise RuntimeError("Nao foi possivel atualizar o versionCode")
+
+          conteudo += """
+
+          android {
+              signingConfigs {
+                  ldRelease {
+                      storeFile file('ld-release.jks')
+                      storePassword System.getenv('LD_KEYSTORE_PASSWORD')
+                      keyAlias System.getenv('LD_KEY_ALIAS')
+                      keyPassword System.getenv('LD_KEY_PASSWORD')
+                  }
+              }
+
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.ldRelease
+                  }
+              }
+          }
+          """
+
+          caminho.write_text(conteudo)
+          print(f"VersionCode configurado: {versao}")
+          print("Assinatura permanente LD configurada.")
+          PY
+
+      - name: Compilar APK Release assinado
+        env:
+          LD_KEYSTORE_PASSWORD: ${{ secrets.LD_KEYSTORE_PASSWORD }}
+          LD_KEY_ALIAS: ${{ secrets.LD_KEY_ALIAS }}
+          LD_KEY_PASSWORD: ${{ secrets.LD_KEY_PASSWORD }}
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleRelease
 
-      - name: Disponibilizar APK V2
+      - name: Disponibilizar APK V2 assinado
         uses: actions/upload-artifact@v4
         with:
-          name: manutencao-industrial-ld-v2-teste-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: manutencao-industrial-ld-v22-assinado
+          path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
