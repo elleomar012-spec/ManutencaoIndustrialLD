@@ -138,7 +138,15 @@ jobs:
               conteudo,
               count=1
           )
+                    conteudo, alteracoes_nome = re.subn(
+              r'\bversionName\s+["\'][^"\']+["\']',
+              'versionName "2.2.0"',
+              conteudo,
+              count=1
+          )
 
+          if alteracoes_nome != 1:
+              raise RuntimeError("Nao foi possivel atualizar o versionName")
           if alteracoes != 1:
               raise RuntimeError("Nao foi possivel atualizar o versionCode")
 
