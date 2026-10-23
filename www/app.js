@@ -163,6 +163,45 @@ function newAsset(a){
  const reset=()=>{oldActions.innerHTML=`<button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button>`;};
  modal.addEventListener("close",reset,{once:true});show();
 }
+ function deleteAsset(id){
+  const asset=state.assets.find(a=>a.id===id);
+
+  if(!asset){
+    alert("Equipamento não encontrado.");
+    return;
+  }
+
+  const linkedOrders=state.orders.filter(o=>o.assetId===id);
+
+  if(linkedOrders.length>0){
+    alert(
+      "Não é possível excluir este equipamento.\n\n" +
+      "Existem " + linkedOrders.length +
+      " ordem(ns) de serviço vinculada(s).\n\n" +
+      "Para preservar o histórico, edite o equipamento e altere sua situação para Desativado."
+    );
+    return;
+  }
+
+  const confirmed=confirm(
+    'Deseja realmente excluir o equipamento "' + asset.name + '"?\n\n' +
+    "Esta operação não poderá ser desfeita sem restaurar um backup."
+  );
+
+  if(!confirmed)return;
+
+  const previous=state.assets;
+  state.assets=state.assets.filter(a=>a.id!==id);
+
+  if(!saveState()){
+    state.assets=previous;
+    alert("Não foi possível salvar a exclusão. O equipamento foi preservado.");
+    return;
+  }
+
+  alert("Equipamento excluído com sucesso.");
+  render();
+} 
 function photoFields(which,label){
   return `<div class="photo-box"><b>${label}</b><div class="field"><label>Escolher da galeria</label><input type="file" name="${which}Gallery" accept="image/*"></div><div class="field"><label>Tirar foto agora</label><input type="file" name="${which}Camera" accept="image/*" capture="environment"></div><img id="preview_${which}" class="preview hidden" alt="Prévia da foto"></div>`;
 }
