@@ -374,7 +374,12 @@ function bind(){
   document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;query="";filter="Todos";render();}));
   document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{
     const action=b.dataset.action,id=b.dataset.id;
-    if(action==="asset-detail")assetDetail(assetById(id));if(action==="new-asset")newAsset();if(action==="edit-asset")newAsset(assetById(id));if(action==="new-order")newOrder(id||"");if(action==="asset-history")assetHistory(assetById(id));
+if(action==="asset-detail")assetDetail(assetById(id));
+if(action==="new-asset")newAsset();
+if(action==="edit-asset")newAsset(assetById(id));
+if(action==="delete-asset")deleteAsset(id);
+if(action==="new-order")newOrder(id||"");
+if(action==="asset-history")assetHistory(assetById(id));
     if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id));
     if(action==="tech-signature")techSignature();if(action==="backup")exportBackup();if(action==="restore")importBackup();
     if(action==="clear-pad")clearPad(b.dataset.pad);
