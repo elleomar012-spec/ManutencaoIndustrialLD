@@ -32,8 +32,18 @@ function assetById(id){return state.assets.find(a=>String(a.id)===String(id));}
 function orderAsset(o){return assetById(o.assetId)?.name||"Equipamento não encontrado";}
 function render(){
   document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+
   const root=document.getElementById("app");
-  root.innerHTML=view==="dashboard"?dashboard():view==="assets"?assetsView():view==="orders"?ordersView():view==="calendar"?calendarView():view==="reports"?reportsView():settingsView();
+
+  root.innerHTML=
+    view==="dashboard"?dashboard():
+    view==="assets"?assetsView():
+    view==="inventory"?inventoryView():
+    view==="orders"?ordersView():
+    view==="calendar"?calendarView():
+    view==="reports"?reportsView():
+    settingsView();
+
   bind();
 }
 function dashboard(){
