@@ -469,6 +469,7 @@ function bind(){
     const action=b.dataset.action,id=b.dataset.id;
 if(action==="asset-detail")assetDetail(assetById(id));
 if(action==="new-asset")newAsset();
+if(action==="new-inventory-item")newInventoryItem()  
 if(action==="edit-asset")newAsset(assetById(id));
 if(action==="delete-asset")deleteAsset(id);
 if(action==="new-order")newOrder(id||"");
