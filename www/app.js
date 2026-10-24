@@ -85,38 +85,81 @@ function assetDetail(a){
  <div class="actions"><button type="button" class="btn primary" data-action="asset-new-order" data-id="${esc(a.id)}">+ Nova OS</button><button type="button" class="btn secondary" data-action="asset-edit" data-id="${esc(a.id)}">Editar ficha</button></div>`,null);
 }
 function inventoryView(){
+  const items=Array.isArray(state.inventory)?state.inventory:[];
+
+  const totalUnits=items.reduce(
+    (sum,item)=>sum+Number(item.quantity||0),0
+  );
+
+  const lowStock=items.filter(
+    item=>Number(item.quantity||0)<=Number(item.minStock||0)
+  ).length;
+
+  const sorted=[...items].sort((a,b)=>
+    String(a.name||"").localeCompare(
+      String(b.name||""),"pt-BR",{sensitivity:"base"}
+    )
+  );
+
   return `
     <div class="section-head">
-  <div>
-    <h2>Estoque de Peças e Materiais</h2>
-    <div class="sub">Controle de materiais da LD Automação</div>
-  </div>
-  <button class="btn primary" data-action="new-inventory-item">+ Cadastrar material</button>
-  </div>
+      <div>
+        <h2>Estoque de Peças e Materiais</h2>
+        <div class="sub">Controle de materiais da LD Automação</div>
+      </div>
+      <button class="btn primary" data-action="new-inventory-item">
+        + Cadastrar material
+      </button>
     </div>
 
-    <div class="cards">
-      <article class="card">
-        <h3>Itens cadastrados</h3>
-        <p>0</p>
-      </article>
+    <div class="stats">
+      <div class="stat">
+        <div class="label">Itens cadastrados</div>
+        <div class="num">${items.length}</div>
+      </div>
 
-      <article class="card">
-        <h3>Unidades disponíveis</h3>
-        <p>0</p>
-      </article>
+      <div class="stat">
+        <div class="label">Unidades disponíveis</div>
+        <div class="num green">${totalUnits}</div>
+      </div>
 
-      <article class="card">
-        <h3>Estoque baixo</h3>
-        <p>0</p>
-      </article>
+      <div class="stat">
+        <div class="label">Estoque baixo</div>
+        <div class="num ${lowStock?"red":"green"}">${lowStock}</div>
+      </div>
     </div>
 
-    <div class="empty">
-      Nenhuma peça cadastrada no estoque.
-    </div>
+    ${sorted.length?`
+      <div class="cards">
+        ${sorted.map(item=>`
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <h3>${esc(item.name)}</h3>
+                <div class="sub">
+                  ${esc(item.code)} · ${esc(item.category)}
+                </div>
+              </div>
+              ${Number(item.quantity)<=Number(item.minStock)
+                ?'<span class="pill parado">Estoque baixo</span>'
+                :'<span class="pill operacional">Disponível</span>'}
+            </div>
+
+            <p>
+              <b>Saldo:</b> ${Number(item.quantity)} ${esc(item.unit)}<br>
+              <b>Estoque mínimo:</b> ${Number(item.minStock)} ${esc(item.unit)}<br>
+              <b>Localização:</b> ${esc(item.location||"—")}
+            </p>
+          </article>
+        `).join("")}
+      </div>
+    `:`
+      <div class="empty">
+        Nenhuma peça cadastrada no estoque.
+      </div>
+    `}
   `;
-} 
+}
 function newInventoryItem(){
   openModal(
     "Cadastrar material",
