@@ -73,6 +73,37 @@ function assetDetail(a){
  <div class="detail-section"><h3>Histórico de manutenções (${list.length})</h3>${list.length?list.map(o=>`<div class="history-item"><b>${fmtDate(o.serviceDate||o.created)} · ${esc(o.type||"Manutenção")} · ${esc(o.id)}</b><p>${esc(o.service||"—")}</p><p class="mini">Técnico: ${esc(o.technician||"—")}</p><div class="actions"><button type="button" class="btn secondary" data-action="view-order" data-id="${esc(o.id)}">Detalhes</button><button type="button" class="btn secondary" data-action="pdf" data-id="${esc(o.id)}">PDF</button></div></div>`).join(""):`<div class="empty">Nenhuma manutenção registrada para esta máquina.</div>`}</div>
  <div class="actions"><button type="button" class="btn primary" data-action="asset-new-order" data-id="${esc(a.id)}">+ Nova OS</button><button type="button" class="btn secondary" data-action="asset-edit" data-id="${esc(a.id)}">Editar ficha</button></div>`,null);
 }
+function inventoryView(){
+  return `
+    <div class="section-head">
+      <div>
+        <h2>Estoque de Peças e Materiais</h2>
+        <div class="sub">Controle de materiais da LD Automação</div>
+      </div>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <h3>Itens cadastrados</h3>
+        <p>0</p>
+      </article>
+
+      <article class="card">
+        <h3>Unidades disponíveis</h3>
+        <p>0</p>
+      </article>
+
+      <article class="card">
+        <h3>Estoque baixo</h3>
+        <p>0</p>
+      </article>
+    </div>
+
+    <div class="empty">
+      Nenhuma peça cadastrada no estoque.
+    </div>
+  `;
+} 
 function assetsView(){
   const list=[...state.assets].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"pt-BR",{sensitivity:"base"})).filter(a=>([a.name,a.code,a.client,a.sector,a.brand,a.model].join(" ").toLowerCase().includes(query.toLowerCase()))&&(filter==="Todos"||a.status===filter));
   return `<div class="section-head"><div><h2>Equipamentos</h2><div class="sub">Cadastre uma máquina uma vez e reutilize nas próximas visitas</div></div><button class="btn primary" data-action="new-asset">+ Cadastrar equipamento</button></div>
