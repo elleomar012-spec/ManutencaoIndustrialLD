@@ -87,10 +87,12 @@ function assetDetail(a){
 function inventoryView(){
   return `
     <div class="section-head">
-      <div>
-        <h2>Estoque de Peças e Materiais</h2>
-        <div class="sub">Controle de materiais da LD Automação</div>
-      </div>
+  <div>
+    <h2>Estoque de Peças e Materiais</h2>
+    <div class="sub">Controle de materiais da LD Automação</div>
+  </div>
+  <button class="btn primary" data-action="new-inventory-item">+ Cadastrar material</button>
+  </div>
     </div>
 
     <div class="cards">
