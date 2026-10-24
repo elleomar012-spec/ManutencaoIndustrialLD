@@ -2,7 +2,18 @@
 "use strict";
 const KEY="ld_manutencao_industrial_v3";
 const OLD_KEYS=["manutencaoIndustrialLD_equipamentos","ld_manutencao_industrial_v1"];
-const DEFAULT={assets:[],orders:[],settings:{technician:"Léo",technicianSignature:""},nextAsset:1,nextOrder:1};
+const DEFAULT={
+  assets:[],
+  orders:[],
+  inventory:[],
+  inventoryMoves:[],
+  settings:{
+    technician:"Léo",
+    technicianSignature:""
+  },
+  nextAsset:1,
+  nextOrder:1
+};
 let state=loadState(),view="dashboard",query="",filter="Todos",modalHandler=null,pads={};
 
 function loadState(){
