@@ -117,6 +117,83 @@ function inventoryView(){
     </div>
   `;
 } 
+function newInventoryItem(){
+  openModal(
+    "Cadastrar material",
+    `
+    <div class="grid2">
+      ${field("Nome do material *","name")}
+      ${field("Código *","code")}
+    </div>
+
+    <div class="grid2">
+      ${selectField("Categoria","category",[
+        "Elétrica",
+        "Automação",
+        "Refrigeração",
+        "Mecânica",
+        "Outros"
+      ],"Elétrica")}
+
+      ${selectField("Unidade","unit",[
+        "UN","M","KG","L","CX"
+      ],"UN")}
+    </div>
+
+    <div class="grid2">
+      ${field("Quantidade inicial *","quantity","0","number",'min="0" step="1" required')}
+      ${field("Estoque mínimo *","minStock","0","number",'min="0" step="1" required')}
+    </div>
+
+    ${field("Localização","location")}
+    ${textarea("Observações","notes")}
+    `,
+    fd=>{
+      const name=String(fd.get("name")||"").trim();
+      const code=String(fd.get("code")||"").trim();
+      const quantity=Number(fd.get("quantity"));
+      const minStock=Number(fd.get("minStock"));
+
+      if(!name)throw Error("Informe o nome do material.");
+      if(!code)throw Error("Informe o código do material.");
+
+      if(state.inventory.some(i=>
+        String(i.code).toLowerCase()===code.toLowerCase()
+      )){
+        throw Error("Já existe um material com esse código.");
+      }
+
+      if(!Number.isSafeInteger(quantity)||quantity<0){
+        throw Error("Informe uma quantidade inicial válida.");
+      }
+
+      if(!Number.isSafeInteger(minStock)||minStock<0){
+        throw Error("Informe um estoque mínimo válido.");
+      }
+
+      const item={
+        id:"item-"+Date.now()+"-"+Math.random().toString(16).slice(2),
+        name,
+        code,
+        category:String(fd.get("category")||"Outros"),
+        unit:String(fd.get("unit")||"UN"),
+        quantity,
+        minStock,
+        location:String(fd.get("location")||"").trim(),
+        notes:String(fd.get("notes")||"").trim(),
+        created:new Date().toISOString()
+      };
+
+      const previous=state.inventory;
+      state.inventory=[...state.inventory,item];
+
+      if(!saveState()){
+        state.inventory=previous;
+        throw Error("Não foi possível salvar o material.");
+      }
+    }
+  );
+} 
 function assetsView(){
   const list=[...state.assets].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"pt-BR",{sensitivity:"base"})).filter(a=>([a.name,a.code,a.client,a.sector,a.brand,a.model].join(" ").toLowerCase().includes(query.toLowerCase()))&&(filter==="Todos"||a.status===filter));
   return `<div class="section-head"><div><h2>Equipamentos</h2><div class="sub">Cadastre uma máquina uma vez e reutilize nas próximas visitas</div></div><button class="btn primary" data-action="new-asset">+ Cadastrar equipamento</button></div>
