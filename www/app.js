@@ -603,6 +603,8 @@ function bind(){
 if(action==="asset-detail")assetDetail(assetById(id));
 if(action==="new-asset")newAsset();
 if(action==="new-inventory-item")newInventoryItem();
+if(action==="inventory-entry")inventoryMovement(id,"entry");
+if(action==="inventory-exit")inventoryMovement(id,"exit");    
 if(action==="edit-asset")newAsset(assetById(id));
 if(action==="delete-asset")deleteAsset(id);
 if(action==="new-order")newOrder(id||"");
