@@ -250,6 +250,95 @@ function newInventoryItem(){
     }
   );
 } 
+function inventoryMovement(id,type){
+  const item=state.inventory.find(i=>i.id===id);
+
+  if(!item){
+    alert("Material não encontrado.");
+    return;
+  }
+
+  const entry=type==="entry";
+
+  openModal(
+    entry?"Entrada de material":"Saída de material",
+    `
+    <div class="note">
+      <b>${esc(item.name)}</b><br>
+      Código: ${esc(item.code)}<br>
+      Saldo atual: ${Number(item.quantity)} ${esc(item.unit)}
+    </div>
+
+    ${field("Quantidade *","quantity","1","number",'min="1" step="1" required')}
+
+    ${field(
+      entry?"Origem / fornecedor":"Destino / equipamento",
+      "destination"
+    )}
+
+    ${textarea("Motivo / observações","notes")}
+    `,
+    fd=>{
+      const quantity=Number(fd.get("quantity"));
+      const current=Number(item.quantity);
+
+      if(!Number.isSafeInteger(quantity)||quantity<=0){
+        throw Error("Informe uma quantidade válida.");
+      }
+
+      if(!Number.isSafeInteger(current)||current<0){
+        throw Error("O saldo atual do material é inválido.");
+      }
+
+      if(!entry&&quantity>current){
+        throw Error(
+          "Estoque insuficiente. Disponível: "+
+          current+" "+item.unit
+        );
+      }
+
+      const newQuantity=entry
+        ?current+quantity
+        :current-quantity;
+
+      if(!Number.isSafeInteger(newQuantity)){
+        throw Error("A quantidade ultrapassa o limite permitido.");
+      }
+
+      const movement={
+        id:"mov-"+Date.now()+"-"+Math.random().toString(16).slice(2),
+        itemId:item.id,
+        itemName:item.name,
+        type:entry?"Entrada":"Saída",
+        quantity,
+        previousQuantity:current,
+        newQuantity,
+        destination:String(fd.get("destination")||"").trim(),
+        notes:String(fd.get("notes")||"").trim(),
+        created:new Date().toISOString()
+      };
+
+      const previousInventory=state.inventory;
+      const previousMoves=state.inventoryMoves;
+
+      state.inventory=state.inventory.map(i=>
+        i.id===id?{...i,quantity:newQuantity}:i
+      );
+
+      state.inventoryMoves=[
+        ...state.inventoryMoves,
+        movement
+      ];
+
+      if(!saveState()){
+        state.inventory=previousInventory;
+        state.inventoryMoves=previousMoves;
+        throw Error("Não foi possível salvar a movimentação.");
+      }
+    }
+  );
+}
+  
 function assetsView(){
   const list=[...state.assets].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"pt-BR",{sensitivity:"base"})).filter(a=>([a.name,a.code,a.client,a.sector,a.brand,a.model].join(" ").toLowerCase().includes(query.toLowerCase()))&&(filter==="Todos"||a.status===filter));
   return `<div class="section-head"><div><h2>Equipamentos</h2><div class="sub">Cadastre uma máquina uma vez e reutilize nas próximas visitas</div></div><button class="btn primary" data-action="new-asset">+ Cadastrar equipamento</button></div>
