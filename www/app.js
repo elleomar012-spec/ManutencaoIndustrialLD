@@ -150,7 +150,20 @@ function inventoryView(){
               <b>Estoque mínimo:</b> ${Number(item.minStock)} ${esc(item.unit)}<br>
               <b>Localização:</b> ${esc(item.location||"—")}
             </p>
-          </article>
+            <div class="actions">
+  <button class="btn primary"
+    data-action="inventory-entry"
+    data-id="${esc(item.id)}">
+    + Entrada
+  </button>
+
+  <button class="btn secondary"
+    data-action="inventory-exit"
+    data-id="${esc(item.id)}">
+    − Saída
+  </button>
+</div>
+</article>
         `).join("")}
       </div>
     `:`
