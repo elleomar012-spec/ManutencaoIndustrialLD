@@ -87,6 +87,13 @@ function assetDetail(a){
 function inventoryView(){
   const items=Array.isArray(state.inventory)?state.inventory:[];
 
+  const searchText=String(inventorySearch||"").trim().toLocaleLowerCase("pt-BR");
+
+  const filteredItems=items.filter(item=>
+  [item.name,item.code,item.category]
+    .some(value=>String(value||"").toLocaleLowerCase("pt-BR").includes(searchText))
+  );
+  
   const totalUnits=items.reduce(
     (sum,item)=>sum+Number(item.quantity||0),0
   );
@@ -95,7 +102,7 @@ function inventoryView(){
     item=>Number(item.quantity||0)<=Number(item.minStock||0)
   ).length;
 
-  const sorted=[...items].sort((a,b)=>
+  const sorted=[...filteredItems].sort((a,b)=>
     String(a.name||"").localeCompare(
       String(b.name||""),"pt-BR",{sensitivity:"base"}
     )
