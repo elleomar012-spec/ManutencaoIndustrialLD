@@ -773,8 +773,81 @@ async function exportBackup(){
   }
 }
 function importBackup(){
-  const input=document.createElement("input");input.type="file";input.accept=".json,application/json";input.onchange=()=>{const f=input.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result),s=d.state||d;if(!Array.isArray(s.assets)||!Array.isArray(s.orders))throw Error();if(confirm("Importar backup e substituir os dados atuais deste aparelho?")){state={...structuredClone(DEFAULT),...s,settings:{...DEFAULT.settings,...(s.settings||{})}};saveState();render();alert("Backup importado com sucesso.");}}catch(e){alert("Arquivo de backup inválido.");}};r.readAsText(f);};input.click();
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".json,application/json";
+
+  input.onchange=()=>{
+    const file=input.files?.[0];
+    if(!file)return;
+
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+      try{
+        const data=JSON.parse(reader.result);
+        const backup=data.state||data;
+
+        if(
+          !backup||
+          !Array.isArray(backup.assets)||
+          !Array.isArray(backup.orders)
+        ){
+          throw Error("Arquivo de backup inválido.");
+        }
+
+        const hasInventory=
+          Array.isArray(backup.inventory)&&
+          Array.isArray(backup.inventoryMoves);
+
+        const message=hasInventory
+          ?"Importar backup completo da V2.3? Os dados atuais serão substituídos."
+          :"Este backup é de uma versão anterior. Equipamentos e ordens de serviço serão restaurados, mas o estoque atual da V2.3 será preservado. Deseja continuar?";
+
+        if(!confirm(message))return;
+
+        const previousState=state;
+
+        const restoredState={
+          ...structuredClone(DEFAULT),
+          ...backup,
+          settings:{
+            ...DEFAULT.settings,
+            ...(backup.settings||{})
+          }
+        };
+
+        if(!hasInventory){
+          restoredState.inventory=state.inventory;
+          restoredState.inventoryMoves=state.inventoryMoves;
+        }
+
+        state=restoredState;
+
+        if(!saveState()){
+          state=previousState;
+          throw Error("Não foi possível salvar o backup importado.");
+        }
+
+        render();
+        alert("Backup importado com sucesso.");
+
+      }catch(error){
+        console.error("Falha na importação:",error);
+        alert(error.message||"Não foi possível importar o backup.");
+      }
+    };
+
+    reader.onerror=()=>{
+      alert("Não foi possível ler o arquivo de backup.");
+    };
+
+    reader.readAsText(file);
+  };
+
+  input.click();
 }
+  
 function bind(){
   document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;query="";filter="Todos";render();}));
   document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{
