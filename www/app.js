@@ -404,8 +404,11 @@ function inventoryMovement(id,type){
 
   openModal("Histórico de movimentações",html,null);
 
-  const save=document.getElementById("modalSave");
-  if(save)save.hidden=true;
+const save=document.getElementById("modalSave");
+if(save)save.style.display="none";
+
+const cancel=document.querySelector("#modal .modal-actions [value='cancel']");
+if(cancel)cancel.textContent="Fechar"; 
 } 
   
 function assetsView(){
