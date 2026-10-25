@@ -796,6 +796,23 @@ if(action==="asset-history")assetHistory(assetById(id));
   const s=document.getElementById("search"),f=document.getElementById("filter");
   if(s)s.addEventListener("input",()=>{query=s.value;const pos=s.selectionStart;render();const ns=document.getElementById("search");if(ns){ns.focus();ns.setSelectionRange(pos,pos);}});
   if(f)f.addEventListener("change",()=>{filter=f.value;render();});
+  
+  const inventoryInput=document.getElementById("inventorySearch");
+
+if(inventoryInput){
+  inventoryInput.addEventListener("input",()=>{
+    inventorySearch=inventoryInput.value;
+    const pos=inventoryInput.selectionStart;
+
+    render();
+
+    const newInput=document.getElementById("inventorySearch");
+    if(newInput){
+      newInput.focus();
+      newInput.setSelectionRange(pos,pos);
+    }
+  });
+}
 }
 document.getElementById("modalForm").addEventListener("submit",async e=>{
   e.preventDefault();if(!modalHandler)return;
