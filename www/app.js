@@ -426,7 +426,15 @@ const save=document.getElementById("modalSave");
 if(save)save.style.display="none";
 
 const cancel=document.querySelector("#modal .modal-actions [value='cancel']");
-if(cancel)cancel.textContent="Fechar"; 
+
+if(cancel){
+  cancel.textContent="Fechar";
+  cancel.type="button";
+  cancel.onclick=()=>{
+    document.getElementById("modal").close();
+    modalHandler=null;
+  };
+}
 } 
   
 function assetsView(){
