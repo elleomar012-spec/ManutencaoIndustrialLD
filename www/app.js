@@ -105,7 +105,9 @@ function inventoryView(){
     <div class="section-head">
       <div>
         <h2>Estoque de Peças e Materiais</h2>
-        <div class="sub">Controle de materiais da LD Automação</div>
+      <div class="sub">Controle de materiais da LD Automação</div>
+      </div>
+      
       <div class="actions">
   <button class="btn primary" data-action="new-inventory-item">
     + Cadastrar material
@@ -115,7 +117,8 @@ function inventoryView(){
     Histórico
   </button>
  </div>
-
+ </div>
+ 
     <div class="stats">
       <div class="stat">
         <div class="label">Itens cadastrados</div>
