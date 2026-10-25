@@ -267,7 +267,6 @@ if(!saveState()){
   state.inventoryMoves=previousMoves;
   throw Error("Não foi possível salvar o material.");
 } 
-      }
     }
   );
 } 
