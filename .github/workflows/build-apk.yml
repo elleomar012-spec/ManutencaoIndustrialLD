@@ -140,7 +140,7 @@ jobs:
           )
           conteudo, alteracoes_nome = re.subn(
               r'\bversionName\s+["\'][^"\']+["\']',
-              'versionName "2.2.0"',
+              'versionName "2.3.0"',
               conteudo,
               count=1
           )
