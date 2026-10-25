@@ -127,6 +127,15 @@ function inventoryView(){
   </button>
  </div>
  </div>
+
+ <div class="list-head">
+  <input
+    id="inventorySearch"
+    type="search"
+    placeholder="🔍 Pesquisar peça por nome, código ou categoria..."
+    value="${esc(inventorySearch)}"
+  >
+</div>
  
     <div class="stats">
       <div class="stat">
