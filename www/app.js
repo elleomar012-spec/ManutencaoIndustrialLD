@@ -187,6 +187,12 @@ function inventoryView(){
     data-id="${esc(item.id)}">
     − Saída
   </button>
+
+  <button class="btn secondary"
+    data-action="inventory-edit"
+    data-id="${esc(item.id)}">
+    ✏️ Editar
+  </button>
 </div>
 </article>
         `).join("")}
