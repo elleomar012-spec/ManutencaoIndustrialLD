@@ -239,13 +239,34 @@ function newInventoryItem(){
         notes:String(fd.get("notes")||"").trim(),
         created:new Date().toISOString()
       };
+     const previous=state.inventory;
+     const previousMoves=state.inventoryMoves;
 
-      const previous=state.inventory;
-      state.inventory=[...state.inventory,item];
+state.inventory=[...state.inventory,item];
 
-      if(!saveState()){
-        state.inventory=previous;
-        throw Error("Não foi possível salvar o material.");
+if(quantity>0){
+  state.inventoryMoves=[
+    ...state.inventoryMoves,
+    {
+      id:"mov-"+Date.now()+"-"+Math.random().toString(16).slice(2),
+      itemId:item.id,
+      itemName:item.name,
+      type:"Entrada inicial",
+      quantity,
+      previousQuantity:0,
+      newQuantity:quantity,
+      destination:"Cadastro inicial",
+      notes:"Saldo inicial do material",
+      created:new Date().toISOString()
+    }
+  ];
+}
+
+if(!saveState()){
+  state.inventory=previous;
+  state.inventoryMoves=previousMoves;
+  throw Error("Não foi possível salvar o material.");
+} 
       }
     }
   );
