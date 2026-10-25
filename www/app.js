@@ -366,6 +366,48 @@ function inventoryMovement(id,type){
   );
 }
   
+ function inventoryHistory(){
+  const moves=Array.isArray(state.inventoryMoves)
+    ?[...state.inventoryMoves]
+    :[];
+
+  moves.sort((a,b)=>
+    String(b.created||"").localeCompare(String(a.created||""))
+  );
+
+  const html=moves.length
+    ?`<div class="cards">
+      ${moves.map(m=>`
+        <article class="card">
+          <div class="card-top">
+            <div>
+              <h3>${esc(m.itemName||"Material")}</h3>
+              <div class="sub">
+                ${fmtDate(m.created)} · ${esc(m.type)}
+              </div>
+            </div>
+          </div>
+
+          <p>
+            <b>Quantidade:</b> ${Number(m.quantity)}<br>
+            <b>Saldo anterior:</b> ${Number(m.previousQuantity)}<br>
+            <b>Saldo após:</b> ${Number(m.newQuantity)}<br>
+            <b>Origem / destino:</b> ${esc(m.destination||"—")}<br>
+            <b>Observações:</b> ${esc(m.notes||"—")}
+          </p>
+        </article>
+      `).join("")}
+    </div>`
+    :`<div class="empty">
+      Nenhuma movimentação registrada.
+    </div>`;
+
+  openModal("Histórico de movimentações",html,null);
+
+  const save=document.getElementById("modalSave");
+  if(save)save.hidden=true;
+} 
+  
 function assetsView(){
   const list=[...state.assets].sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""),"pt-BR",{sensitivity:"base"})).filter(a=>([a.name,a.code,a.client,a.sector,a.brand,a.model].join(" ").toLowerCase().includes(query.toLowerCase()))&&(filter==="Todos"||a.status===filter));
   return `<div class="section-head"><div><h2>Equipamentos</h2><div class="sub">Cadastre uma máquina uma vez e reutilize nas próximas visitas</div></div><button class="btn primary" data-action="new-asset">+ Cadastrar equipamento</button></div>
