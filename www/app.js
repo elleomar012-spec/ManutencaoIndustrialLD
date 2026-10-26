@@ -177,9 +177,11 @@ const outOfStock=items.filter(
                   ${esc(item.code)} · ${esc(item.category)}
                 </div>
               </div>
-              ${Number(item.quantity)<=Number(item.minStock)
-                ?'<span class="pill parado">Estoque baixo</span>'
-                :'<span class="pill operacional">Disponível</span>'}
+              ${Number(item.quantity)===0
+  ?'<span class="pill parado">Sem estoque</span>'
+  :Number(item.quantity)<=Number(item.minStock)
+    ?'<span class="pill parado">Estoque baixo</span>'
+    :'<span class="pill operacional">Disponível</span>'}
             </div>
 
             <p>
