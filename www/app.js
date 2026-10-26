@@ -479,6 +479,87 @@ function inventoryMovement(id,type){
     }
   );
 }
+
+  function inventoryDetail(id){
+  const item=state.inventory.find(i=>
+    String(i.id)===String(id)
+  );
+
+  if(!item){
+    alert("Material não encontrado.");
+    return;
+  }
+
+  const moves=(Array.isArray(state.inventoryMoves)
+    ?state.inventoryMoves:[])
+    .filter(m=>String(m.itemId)===String(id))
+    .sort((a,b)=>
+      String(b.created||"").localeCompare(String(a.created||""))
+    );
+
+  const html=`
+    <div class="cards">
+      <article class="card">
+        <h3>${esc(item.name)}</h3>
+
+        <p>
+          <b>Código:</b> ${esc(item.code)}<br>
+          <b>Categoria:</b> ${esc(item.category||"—")}<br>
+          <b>Unidade:</b> ${esc(item.unit||"UN")}<br>
+          <b>Saldo disponível:</b> ${Number(item.quantity)}<br>
+          <b>Estoque mínimo:</b> ${Number(item.minStock)}<br>
+          <b>Localização:</b> ${esc(item.location||"—")}<br>
+          <b>Observações:</b> ${esc(item.notes||"—")}<br>
+          <b>Cadastrado em:</b> ${fmtDate(item.created)}
+        </p>
+      </article>
+
+      <h3>Histórico da peça</h3>
+
+      ${moves.length
+        ?moves.map(m=>`
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <h3>${esc(m.type||"Movimentação")}</h3>
+                <div class="sub">${fmtDate(m.created)}</div>
+              </div>
+            </div>
+
+            <p>
+              <b>Quantidade:</b> ${Number(m.quantity)}<br>
+              <b>Saldo anterior:</b> ${Number(m.previousQuantity)}<br>
+              <b>Saldo após:</b> ${Number(m.newQuantity)}<br>
+              <b>Origem / destino:</b> ${esc(m.destination||"—")}<br>
+              <b>Observações:</b> ${esc(m.notes||"—")}
+            </p>
+          </article>
+        `).join("")
+        :`<div class="empty">
+          Nenhuma movimentação registrada para este material.
+        </div>`
+      }
+    </div>
+  `;
+
+  openModal("Detalhes do material",html,null);
+
+  const save=document.getElementById("modalSave");
+  if(save)save.style.display="none";
+
+  const cancel=document.querySelector(
+    "#modal .modal-actions [value='cancel']"
+  );
+
+  if(cancel){
+    cancel.textContent="Fechar";
+    cancel.type="button";
+    cancel.onclick=()=>{
+      document.getElementById("modal").close();
+      modalHandler=null;
+    };
+  }
+}
   
  function inventoryHistory(){
   const moves=Array.isArray(state.inventoryMoves)
