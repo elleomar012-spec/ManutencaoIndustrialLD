@@ -188,10 +188,16 @@ function inventoryView(){
     − Saída
   </button>
 
-  <button class="btn secondary"
+    <button class="btn secondary"
     data-action="inventory-edit"
     data-id="${esc(item.id)}">
     ✏️ Editar
+  </button>
+
+  <button class="btn secondary"
+    data-action="inventory-detail"
+    data-id="${esc(item.id)}">
+    🔎 Detalhes
   </button>
 </div>
 </article>
