@@ -301,6 +301,90 @@ if(!saveState()){
     }
   );
 } 
+
+ function editInventoryItem(id){
+  const item=state.inventory.find(i=>String(i.id)===String(id));
+
+  if(!item){
+    alert("Material não encontrado.");
+    return;
+  }
+
+  openModal(
+    "Editar material",
+    `
+    <div class="grid2">
+      ${field("Nome do material *","name",item.name)}
+      ${field("Código *","code",item.code)}
+    </div>
+
+    <div class="grid2">
+      ${selectField("Categoria","category",[
+        "Elétrica",
+        "Automação",
+        "Refrigeração",
+        "Mecânica",
+        "Outros"
+      ],item.category)}
+
+      ${selectField("Unidade","unit",[
+        "UN","M","KG","L","CX"
+      ],item.unit)}
+    </div>
+
+    <div class="grid2">
+      ${field("Estoque mínimo *","minStock",item.minStock,"number",'min="0" step="1" required')}
+    </div>
+
+    ${field("Localização","location",item.location)}
+    ${textarea("Observações","notes",item.notes)}
+
+    <p>Saldo atual: ${esc(item.quantity)} ${esc(item.unit)}</p>
+    `,
+    fd=>{
+      const name=String(fd.get("name")||"").trim();
+      const code=String(fd.get("code")||"").trim();
+      const minStock=Number(fd.get("minStock"));
+
+      if(!name)throw Error("Informe o nome do material.");
+      if(!code)throw Error("Informe o código do material.");
+
+      if(state.inventory.some(i=>
+        String(i.id)!==String(id) &&
+        String(i.code).toLowerCase()===code.toLowerCase()
+      )){
+        throw Error("Já existe outro material com esse código.");
+      }
+
+      if(!Number.isSafeInteger(minStock)||minStock<0){
+        throw Error("Informe um estoque mínimo válido.");
+      }
+
+      const previous=state.inventory;
+
+      const updated={
+        ...item,
+        name,
+        code,
+        category:String(fd.get("category")||"Outros"),
+        unit:String(fd.get("unit")||"UN"),
+        minStock,
+        location:String(fd.get("location")||"").trim(),
+        notes:String(fd.get("notes")||"").trim()
+      };
+
+      state.inventory=state.inventory.map(i=>
+        String(i.id)===String(id)?updated:i
+      );
+
+      if(!saveState()){
+        state.inventory=previous;
+        throw Error("Não foi possível salvar as alterações.");
+      }
+    }
+  );
+} 
+  
 function inventoryMovement(id,type){
   const item=state.inventory.find(i=>i.id===id);
 
