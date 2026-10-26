@@ -7,9 +7,15 @@ const DEFAULT={
   orders:[],
   inventory:[],
   inventoryMoves:[],
-  settings:{
+    settings:{
     technician:"Léo",
-    technicianSignature:""
+    technicianSignature:"",
+    companyName:"",
+    companyDocument:"",
+    companyPhone:"",
+    companyEmail:"",
+    companyAddress:"",
+    companyLogo:""
   },
   nextAsset:1,
   nextOrder:1
