@@ -461,8 +461,11 @@ function inventoryMovement(id,type){
         previousQuantity:current,
         newQuantity,
         destination:String(fd.get("destination")||"").trim(),
-        notes:String(fd.get("notes")||"").trim(),
-        created:new Date().toISOString()
+responsible:String(fd.get("responsible")||"").trim(),
+equipment:String(fd.get("equipment")||"").trim(),
+orderNumber:String(fd.get("orderNumber")||"").trim(),
+notes:String(fd.get("notes")||"").trim(),
+created:new Date().toISOString()
       };
 
       const previousInventory=state.inventory;
