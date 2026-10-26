@@ -145,21 +145,26 @@ const outOfStock=items.filter(
 </div>
  
     <div class="stats">
-      <div class="stat">
-        <div class="label">Itens cadastrados</div>
-        <div class="num">${items.length}</div>
-      </div>
+  <div class="stat">
+    <div class="label">Itens cadastrados</div>
+    <div class="num">${items.length}</div>
+  </div>
 
-      <div class="stat">
-        <div class="label">Unidades disponíveis</div>
-        <div class="num green">${totalUnits}</div>
-      </div>
+  <div class="stat">
+    <div class="label">Unidades disponíveis</div>
+    <div class="num green">${totalUnits}</div>
+  </div>
 
-      <div class="stat">
-        <div class="label">Estoque baixo</div>
-        <div class="num ${lowStock?"red":"green"}">${lowStock}</div>
-      </div>
-    </div>
+  <div class="stat">
+    <div class="label">Estoque baixo</div>
+    <div class="num ${lowStock?"red":"green"}">${lowStock}</div>
+  </div>
+
+  <div class="stat">
+    <div class="label">Sem estoque</div>
+    <div class="num ${outOfStock?"red":"green"}">${outOfStock}</div>
+  </div>
+</div>
 
     ${sorted.length?`
       <div class="cards">
