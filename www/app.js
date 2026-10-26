@@ -540,6 +540,9 @@ created:new Date().toISOString()
               <b>Saldo anterior:</b> ${Number(m.previousQuantity)}<br>
               <b>Saldo após:</b> ${Number(m.newQuantity)}<br>
               <b>Origem / destino:</b> ${esc(m.destination||"—")}<br>
+              <b>Responsável:</b> ${esc(m.responsible||"—")}<br>
+              <b>Equipamento:</b> ${esc(m.equipment||"—")}<br>
+              <b>Número da OS:</b> ${esc(m.orderNumber||"—")}<br>
               <b>Observações:</b> ${esc(m.notes||"—")}
             </p>
           </article>
