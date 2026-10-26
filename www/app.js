@@ -100,9 +100,16 @@ function inventoryView(){
     (sum,item)=>sum+Number(item.quantity||0),0
   );
 
-  const lowStock=items.filter(
-    item=>Number(item.quantity||0)<=Number(item.minStock||0)
-  ).length;
+  const lowStock=items.filter(item=>{
+  const quantity=Number(item.quantity||0);
+  const minStock=Number(item.minStock||0);
+
+  return quantity>0 && quantity<=minStock;
+}).length;
+
+const outOfStock=items.filter(
+  item=>Number(item.quantity||0)===0
+).length;
 
   const sorted=[...filteredItems].sort((a,b)=>
     String(a.name||"").localeCompare(
