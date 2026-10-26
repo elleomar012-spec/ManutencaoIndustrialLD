@@ -413,9 +413,15 @@ function inventoryMovement(id,type){
     ${field("Quantidade *","quantity","1","number",'min="1" step="1" required')}
 
     ${field(
-      entry?"Origem / fornecedor":"Destino / equipamento",
+      entry?"Origem / fornecedor":"Destino / local",
       "destination"
     )}
+
+    ${field("Responsável","responsible",state.settings?.technician||"")}
+
+    ${field("Equipamento","equipment")}
+
+    ${field("Número da OS","orderNumber")}
 
     ${textarea("Motivo / observações","notes")}
     `,
