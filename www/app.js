@@ -889,6 +889,53 @@ function techSignature(){
   initSignaturePad("techPad");
   const c=document.getElementById("techPad");if(c&&state.settings.technicianSignature){const img=new Image();img.onload=()=>c.getContext("2d").drawImage(img,0,0,c.width,c.height);img.src=state.settings.technicianSignature;pads.techPad.drawn=true;}
 }
+function companySettings(){
+  const s=state.settings;
+
+  openModal("Minha Empresa",`
+    <p>Cadastre os dados da empresa que serão utilizados nos relatórios.</p>
+
+    ${field("Nome da empresa *","companyName",s.companyName||"")}
+    ${field("CNPJ / CPF","companyDocument",s.companyDocument||"")}
+
+    <div class="grid2">
+      ${field("Telefone","companyPhone",s.companyPhone||"")}
+      ${field("E-mail","companyEmail",s.companyEmail||"","email")}
+    </div>
+
+    ${textarea("Endereço completo","companyAddress",s.companyAddress||"")}
+
+    <div class="note">
+      O logotipo personalizado será adicionado na próxima etapa.
+    </div>
+  `,fd=>{
+    const name=String(fd.get("companyName")||"").trim();
+
+    if(!name){
+      throw Error("Informe o nome da empresa.");
+    }
+
+    const previous=state.settings;
+
+    state.settings={
+      ...previous,
+      companyName:name,
+      companyDocument:String(fd.get("companyDocument")||"").trim(),
+      companyPhone:String(fd.get("companyPhone")||"").trim(),
+      companyEmail:String(fd.get("companyEmail")||"").trim(),
+      companyAddress:String(fd.get("companyAddress")||"").trim()
+    };
+
+    if(!saveState()){
+      state.settings=previous;
+      throw Error("Não foi possível salvar os dados da empresa.");
+    }
+
+    render();
+  });
+}  
+
+}
 function addText(doc,text,x,y,width=175,size=10){
   doc.setFontSize(size);const lines=doc.splitTextToSize(String(text||"—"),width);const h=lines.length*(size*0.48)+2;
   if(y+h>278){doc.addPage();y=18;}
