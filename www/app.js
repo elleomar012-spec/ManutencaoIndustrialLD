@@ -933,7 +933,6 @@ function companySettings(){
 
     render();
   });
-}  
 
 }
 function addText(doc,text,x,y,width=175,size=10){
