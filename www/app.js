@@ -722,12 +722,6 @@ function settingsView(){
     Para não perder os dados, mantenha um backup atualizado.
   </div>`;
 }
-function settingsView(){
-  return `<div class="section-head"><div><h2>Configurações</h2><div class="sub">Personalize os relatórios da LD AUTOMAÇÃO</div></div></div>
-  <article class="card"><h3>Assinatura do técnico</h3><p>Salve sua assinatura uma vez. Ela poderá ser incluída automaticamente nos próximos PDFs.</p><div class="actions"><button class="btn primary" data-action="tech-signature">Cadastrar / atualizar assinatura</button></div>${state.settings.technicianSignature?`<p class="mini">Assinatura salva neste aparelho.</p>`:`<p class="mini">Nenhuma assinatura cadastrada.</p>`}</article>
-  <article class="card" style="margin-top:10px"><h3>Backup dos dados</h3><p>Exporte seus equipamentos, histórico, fotos e configurações para guardar uma cópia.</p><div class="actions"><button class="btn secondary" data-action="backup">Exportar backup</button><button class="btn secondary" data-action="restore">Importar backup</button></div></article>
-  <div class="note">Os registros e as assinaturas ficam salvos localmente neste aparelho. Para não perder os dados, mantenha um backup atualizado.</div>`;
-}
 function field(label,name,value="",type="text",extra=""){return `<div class="field"><label for="f_${name}">${label}</label><input id="f_${name}" name="${name}" type="${type}" value="${esc(value)}" ${extra}></div>`;}
 function selectField(label,name,options,value){return `<div class="field"><label for="f_${name}">${label}</label><select id="f_${name}" name="${name}">${options.map(o=>`<option ${o===value?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`;}
 function textarea(label,name,value=""){return `<div class="field"><label for="f_${name}">${label}</label><textarea id="f_${name}" name="${name}">${esc(value)}</textarea></div>`;}
