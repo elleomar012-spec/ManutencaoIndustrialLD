@@ -673,13 +673,54 @@ function calendarView(){
  return `<div class="section-head"><div><h2>Agenda preventiva</h2><div class="sub">Próximas datas registradas nos equipamentos</div></div><button class="btn primary" data-view="assets">Ver equipamentos</button></div>
  ${entries.length?`<div class="agenda-list">${entries.map(({date,asset})=>`<article class="card"><div class="agenda-date">${fmtDate(date)}</div><div class="agenda-row"><div><h3>${esc(asset.name)}</h3><p>${esc(asset.code||asset.id)} · ${esc(asset.sector||"Setor não informado")}</p></div><button class="btn primary" data-action="new-order" data-id="${esc(asset.id)}">Nova OS</button></div></article>`).join("")}</div>`:`<div class="empty">Nenhuma data preventiva cadastrada. Defina a próxima manutenção ao cadastrar ou editar um equipamento.</div>`}`;
 }
-function reportsView(){
- const completed=state.orders.filter(o=>o.status==="Concluída").length;
- return `<div class="section-head"><div><h2>Relatórios</h2><div class="sub">Documentação das manutenções realizadas</div></div></div>
- <div class="stats"><div class="stat"><div class="label">OS registradas</div><div class="num">${state.orders.length}</div></div><div class="stat"><div class="label">Concluídas</div><div class="num green">${completed}</div></div></div>
- <div class="note">Para gerar ou compartilhar o PDF profissional de uma OS, selecione o relatório abaixo. A assinatura e a marca-d'água permanecem na base original.</div>
- ${state.orders.length?`<div class="cards">${[...state.orders].sort((a,b)=>(b.created||"").localeCompare(a.created||"")).map(orderCard).join("")}</div>`:`<div class="empty">Ainda não há relatórios. Cadastre uma manutenção para gerar o primeiro PDF.</div>`}
- <div class="toolbar"><button class="btn secondary" data-action="backup">Exportar backup dos dados</button></div>`;
+function settingsView(){
+  const company=state.settings.companyName||"Não cadastrada";
+
+  return `
+  <div class="section-head">
+    <div>
+      <h2>Configurações</h2>
+      <div class="sub">Personalize os dados e relatórios da sua empresa</div>
+    </div>
+  </div>
+
+  <article class="card">
+    <h3>🏢 Minha Empresa</h3>
+    <p>Cadastre os dados da sua empresa para utilizar nos relatórios e ordens de serviço.</p>
+    <p><b>Empresa:</b> ${esc(company)}</p>
+    <div class="actions">
+      <button class="btn primary" data-action="company-settings">
+        Cadastrar / editar empresa
+      </button>
+    </div>
+  </article>
+
+  <article class="card" style="margin-top:10px">
+    <h3>Assinatura do técnico</h3>
+    <p>Salve sua assinatura uma vez. Ela poderá ser incluída automaticamente nos próximos PDFs.</p>
+    <div class="actions">
+      <button class="btn primary" data-action="tech-signature">
+        Cadastrar / atualizar assinatura
+      </button>
+    </div>
+    ${state.settings.technicianSignature
+      ?'<p class="mini">Assinatura salva neste aparelho.</p>'
+      :'<p class="mini">Nenhuma assinatura cadastrada.</p>'}
+  </article>
+
+  <article class="card" style="margin-top:10px">
+    <h3>Backup dos dados</h3>
+    <p>Exporte seus equipamentos, histórico, fotos e configurações para guardar uma cópia.</p>
+    <div class="actions">
+      <button class="btn secondary" data-action="backup">Exportar backup</button>
+      <button class="btn secondary" data-action="restore">Importar backup</button>
+    </div>
+  </article>
+
+  <div class="note">
+    Os registros e as assinaturas ficam salvos localmente neste aparelho.
+    Para não perder os dados, mantenha um backup atualizado.
+  </div>`;
 }
 function settingsView(){
   return `<div class="section-head"><div><h2>Configurações</h2><div class="sub">Personalize os relatórios da LD AUTOMAÇÃO</div></div></div>
