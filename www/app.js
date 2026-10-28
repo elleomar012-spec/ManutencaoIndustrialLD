@@ -734,7 +734,15 @@ function field(label,name,value="",type="text",extra=""){return `<div class="fie
 function selectField(label,name,options,value){return `<div class="field"><label for="f_${name}">${label}</label><select id="f_${name}" name="${name}">${options.map(o=>`<option ${o===value?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`;}
 function textarea(label,name,value=""){return `<div class="field"><label for="f_${name}">${label}</label><textarea id="f_${name}" name="${name}">${esc(value)}</textarea></div>`;}
 function openModal(title,html,handler){document.querySelector("#modal .modal-actions").innerHTML=`<button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button>`;document.getElementById("modalBody").innerHTML=`<h2>${title}</h2>${html}`;modalHandler=handler;pads={};document.getElementById("modal").showModal();bindModalActions();}
-function bindModalActions(){document.querySelectorAll("#modal [data-action]").forEach(b=>b.addEventListener("click",()=>{const action=b.dataset.action,id=b.dataset.id;if(action==="clear-pad")clearPad(b.dataset.pad);if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id));if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="asset-edit")newAsset(assetById(id));if(action==="asset-new-order"){document.getElementById("modal").close();newOrder(id);}}));}
+function bindModalActions(){document.querySelectorAll("#modal [data-action]").forEach(b=>b.addEventListener("click",()=>{const action=b.dataset.action,id=b.dataset.id;if(action==="clear-pad")clearPad(b.dataset.pad);if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id))if(action==="edit-order"){
+  const order=state.orders.find(o=>o.id===id);
+  if(!order){
+    alert("Ordem de serviço não encontrada.");
+    return;
+  }
+  document.getElementById("modal").close();
+  editOrder(order);
+}if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="asset-edit")newAsset(assetById(id));if(action==="asset-new-order"){document.getElementById("modal").close();newOrder(id);}}));}
 async function scheduleReminder(asset){
   const plugin=window.Capacitor?.Plugins?.LocalNotifications;
   if(!plugin||!asset?.nextMaintenance||asset.status==="Desativado")return;
