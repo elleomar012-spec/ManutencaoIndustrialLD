@@ -673,6 +673,14 @@ function calendarView(){
  return `<div class="section-head"><div><h2>Agenda preventiva</h2><div class="sub">Próximas datas registradas nos equipamentos</div></div><button class="btn primary" data-view="assets">Ver equipamentos</button></div>
  ${entries.length?`<div class="agenda-list">${entries.map(({date,asset})=>`<article class="card"><div class="agenda-date">${fmtDate(date)}</div><div class="agenda-row"><div><h3>${esc(asset.name)}</h3><p>${esc(asset.code||asset.id)} · ${esc(asset.sector||"Setor não informado")}</p></div><button class="btn primary" data-action="new-order" data-id="${esc(asset.id)}">Nova OS</button></div></article>`).join("")}</div>`:`<div class="empty">Nenhuma data preventiva cadastrada. Defina a próxima manutenção ao cadastrar ou editar um equipamento.</div>`}`;
 }
+function reportsView(){
+ const completed=state.orders.filter(o=>o.status==="Concluída").length;
+ return `<div class="section-head"><div><h2>Relatórios</h2><div class="sub">Documentação das manutenções realizadas</div></div></div>
+ <div class="stats"><div class="stat"><div class="label">OS registradas</div><div class="num">${state.orders.length}</div></div><div class="stat"><div class="label">Concluídas</div><div class="num green">${completed}</div></div></div>
+ <div class="note">Para gerar ou compartilhar o PDF profissional de uma OS, selecione o relatório abaixo. A assinatura e a marca-d'água permanecem na base original.</div>
+ ${state.orders.length?`<div class="cards">${[...state.orders].sort((a,b)=>(b.created||"").localeCompare(a.created||"")).map(orderCard).join("")}</div>`:`<div class="empty">Ainda não há relatórios. Cadastre uma manutenção para gerar o primeiro PDF.</div>`}
+ <div class="toolbar"><button class="btn secondary" data-action="backup">Exportar backup dos dados</button></div>`;
+}
 function settingsView(){
   const company=state.settings.companyName||"Não cadastrada";
 
