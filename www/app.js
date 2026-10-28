@@ -887,7 +887,10 @@ function viewOrder(o){
   openModal("Detalhes da manutenção",`<div class="note"><b>${esc(o.id)} · ${esc(o.type)}</b><br>${esc(a?.name||"Equipamento")} · ${fmtDate(o.serviceDate)}</div>
   <p><b>Defeito / motivo:</b> ${esc(o.defect||"—")}</p><p><b>Diagnóstico:</b><br>${esc(o.diagnosis||"—")}</p><p><b>Serviço executado:</b><br>${esc(o.service||"—")}</p><p><b>Peças substituídas:</b><br>${esc(o.parts||"—")}</p><p><b>Recomendações:</b><br>${esc(o.recommendation||"—")}</p><p><b>Próxima manutenção:</b> ${fmtDate(o.nextMaintenance)}</p>
   <div class="photo-grid">${o.photoBefore?`<div><b>ANTES</b><img class="preview" src="${o.photoBefore}"></div>`:""}${o.photoAfter?`<div><b>DEPOIS</b><img class="preview" src="${o.photoAfter}"></div>`:""}</div>
-  <div class="actions"><button type="button" class="btn primary" data-action="pdf" data-id="${esc(o.id)}">Gerar PDF / compartilhar</button></div>`,()=>{});
+  <div class="actions">
+    <button type="button" class="btn secondary" data-action="edit-order" data-id="${esc(o.id)}">✏️ Editar OS</button>
+    <button type="button" class="btn primary" data-action="pdf" data-id="${esc(o.id)}">Gerar PDF / compartilhar</button>
+  </div>`,()=>{});
 }
 function techSignature(){
   openModal("Assinatura do técnico",`<p>Faça sua assinatura uma vez. Ela será incluída nos próximos relatórios.</p><div class="field"><canvas id="techPad" class="signature-pad" width="600" height="180"></canvas><div class="pad-actions"><button type="button" class="btn secondary" data-action="clear-pad" data-pad="techPad">Limpar</button></div></div>`,()=>{
