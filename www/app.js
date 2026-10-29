@@ -1301,7 +1301,26 @@ if(action==="edit-asset")newAsset(assetById(id));
 if(action==="delete-asset")deleteAsset(id);
 if(action==="new-order")newOrder(id||"");
 if(action==="asset-history")assetHistory(assetById(id));
-if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="pdf")generatePdf(state.orders.find(o=>o.id===id)); 
+
+if(action==="view-order"){
+  viewOrder(state.orders.find(o=>o.id===id));
+}
+
+if(action==="edit-order"){
+  const order=state.orders.find(o=>o.id===id);
+
+  if(!order){
+    alert("Ordem de serviço não encontrada.");
+    return;
+  }
+
+  editOrder(order);
+}
+
+if(action==="pdf"){
+  generatePdf(state.orders.find(o=>o.id===id));
+}
+
 if(action==="company-settings")companySettings();
 if(action==="tech-signature")techSignature();
 if(action==="backup")exportBackup();
