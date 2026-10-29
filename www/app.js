@@ -923,6 +923,90 @@ function assetHistory(a){
   openModal("Histórico do equipamento",`<h3>${esc(a.name)} · ${esc(a.code)}</h3><p>${esc(a.client||"Cliente não informado")} · ${esc(a.sector||"Setor não informado")}</p><p>Situação atual: ${esc(a.status)}</p><hr>
   ${list.length?list.map(o=>`<div class="history-item"><b>${fmtDate(o.serviceDate||o.created)} · ${esc(o.type)}</b><p>${esc(o.service||"—")}</p><p class="mini">Técnico: ${esc(o.technician||"—")} · OS ${esc(o.id)}</p><div class="actions"><button type="button" class="btn secondary" data-action="pdf" data-id="${esc(o.id)}">PDF</button><button type="button" class="btn secondary" data-action="view-order" data-id="${esc(o.id)}">Detalhes</button></div></div>`).join(""):`<div class="empty">Ainda não há manutenções para este equipamento.</div>`}`,()=>{});
 }
+function editOrder(o){
+  if(!o){
+    alert("Ordem de serviço não encontrada.");
+    return;
+  }
+
+  const a=assetById(o.assetId);
+  const assetOptions=state.assets.map(item=>
+    item.id+"|"+item.code+" — "+item.name
+  );
+
+  const selectedAsset=a
+    ?a.id+"|"+a.code+" — "+a.name
+    :"";
+
+  openModal("Editar manutenção — "+o.id,`
+    ${selectField("Equipamento *","assetId",assetOptions,selectedAsset)}
+    <div class="grid2">
+      ${selectField("Tipo de manutenção","type",["Corretiva","Preventiva"],o.type||"Corretiva")}
+      ${selectField("Situação após o serviço","assetStatus",["Em operação","Em manutenção","Parado","Aguardando peças","Desativado"],a?.status||"Em operação")}
+    </div>
+    <div class="grid2">
+      ${field("Data do serviço *","serviceDate",o.serviceDate||"","date")}
+      ${field("Técnico responsável","technician",o.technician||"")}
+    </div>
+    ${field("Defeito / motivo da visita","defect",o.defect||"")}
+    ${textarea("Diagnóstico","diagnosis",o.diagnosis||"")}
+    ${textarea("Serviço executado *","service",o.service||"")}
+    ${textarea("Peças substituídas","parts",o.parts||"")}
+    ${textarea("Recomendações","recommendation",o.recommendation||"")}
+    ${field("Próxima manutenção","nextMaintenance",o.nextMaintenance||"","date")}
+    <div class="note">
+      As fotografias e assinaturas originais serão preservadas nesta edição.
+      A substituição de fotos será adicionada em uma próxima etapa.
+    </div>
+  `,async fd=>{
+    const service=String(fd.get("service")||"").trim();
+    if(!service)throw Error("Descreva o serviço executado.");
+
+    const selected=String(fd.get("assetId")||"").split("|")[0];
+    const selectedEquipment=assetById(selected);
+
+    if(!selectedEquipment){
+      throw Error("Selecione um equipamento válido.");
+    }
+
+    const changes={
+      assetId:selectedEquipment.id,
+      type:fd.get("type"),
+      serviceDate:fd.get("serviceDate"),
+      technician:fd.get("technician"),
+      defect:fd.get("defect"),
+      diagnosis:fd.get("diagnosis"),
+      service,
+      parts:fd.get("parts"),
+      recommendation:fd.get("recommendation"),
+      nextMaintenance:fd.get("nextMaintenance"),
+      updatedAt:new Date().toISOString()
+    };
+
+    const previousState=JSON.stringify(state);
+
+    try{
+      Object.assign(o,changes);
+
+      selectedEquipment.status=fd.get("assetStatus");
+      selectedEquipment.nextMaintenance=
+        changes.nextMaintenance||selectedEquipment.nextMaintenance;
+
+      if(!saveState()){
+        throw Error("Não foi possível salvar a edição.");
+      }
+    }catch(error){
+      state=JSON.parse(previousState);
+      throw error;
+    }
+
+    document.getElementById("modal").close();
+    modalHandler=null;
+    render();
+
+    alert("OS "+o.id+" atualizada com sucesso!");
+  });
+}
 function viewOrder(o){
   const a=assetById(o.assetId);
   openModal("Detalhes da manutenção",`<div class="note"><b>${esc(o.id)} · ${esc(o.type)}</b><br>${esc(a?.name||"Equipamento")} · ${fmtDate(o.serviceDate)}</div>
