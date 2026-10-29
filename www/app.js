@@ -775,7 +775,7 @@ function bindModalActions(){
     });
   });
 }
-}if(action==="view-order")viewOrder(state.orders.find(o=>o.id===id));if(action==="asset-edit")newAsset(assetById(id));if(action==="asset-new-order"){document.getElementById("modal").close();newOrder(id);}}));}
+
 async function scheduleReminder(asset){
   const plugin=window.Capacitor?.Plugins?.LocalNotifications;
   if(!plugin||!asset?.nextMaintenance||asset.status==="Desativado")return;
