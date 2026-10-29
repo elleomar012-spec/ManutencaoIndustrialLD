@@ -994,6 +994,19 @@ const {
   ...previousOrder
 }=o;
 
+  const hasChanges=Object.keys(changes).some(
+  key=>key!=="updatedAt" &&
+  String(o[key]??"")!==String(changes[key]??"")
+);
+
+const statusChanged=
+  selectedEquipment.status!==fd.get("assetStatus");
+
+if(!hasChanges && !statusChanged){
+  alert("Nenhuma alteração foi realizada nesta OS.");
+  return;
+}
+    
     const revision={
       number:(o.revisionHistory?.length||0)+1,
       date:new Date().toISOString(),
