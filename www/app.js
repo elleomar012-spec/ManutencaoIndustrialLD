@@ -1003,8 +1003,7 @@ const statusChanged=
   selectedEquipment.status!==fd.get("assetStatus");
 
 if(!hasChanges && !statusChanged){
-  alert("Nenhuma alteração foi realizada nesta OS.");
-  return;
+  throw Error("Nenhuma alteração foi realizada nesta OS.");
 }
     
     const revision={
