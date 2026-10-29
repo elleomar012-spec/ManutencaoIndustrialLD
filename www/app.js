@@ -984,17 +984,32 @@ function editOrder(o){
     };
 
     const previousState=JSON.stringify(state);
+    const previousOrder=structuredClone(o);
+
+    const revision={
+      number:(o.revisionHistory?.length||0)+1,
+      date:new Date().toISOString(),
+      previousData:previousOrder
+    };
 
     try{
       Object.assign(o,changes);
 
+      o.revisionHistory=[
+        ...(o.revisionHistory||[]),
+        revision
+      ];
+
       selectedEquipment.status=fd.get("assetStatus");
-      selectedEquipment.nextMaintenance=
-        changes.nextMaintenance||selectedEquipment.nextMaintenance;
+
+      if(changes.nextMaintenance){
+        selectedEquipment.nextMaintenance=changes.nextMaintenance;
+      }
 
       if(!saveState()){
         throw Error("Não foi possível salvar a edição.");
       }
+
     }catch(error){
       state=JSON.parse(previousState);
       throw error;
