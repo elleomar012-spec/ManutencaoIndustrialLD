@@ -26,7 +26,7 @@
 </nav>
 <main id="app" class="content"></main>
 <footer><span>LD AUTOMAÇÃO</span><span>Dados locais · faça backup antes de desinstalar</span></footer>
-<dialog id="modal"><form method="dialog" id="modalForm"><div id="modalBody"></div><div class="modal-actions"><button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button></div></form></dialog>
+<dialog id="modal"><form method="dialog" id="modalForm"><div id="modalBody"></div><div class="modal-actions"><button type="button" class="btn secondary" value="cancel" onclick="document.getElementById('modal').close()">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button></div></form></dialog>
 <script src="app.js"></script>
 </body>
 </html>
