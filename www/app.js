@@ -733,7 +733,7 @@ function settingsView(){
 function field(label,name,value="",type="text",extra=""){return `<div class="field"><label for="f_${name}">${label}</label><input id="f_${name}" name="${name}" type="${type}" value="${esc(value)}" ${extra}></div>`;}
 function selectField(label,name,options,value){return `<div class="field"><label for="f_${name}">${label}</label><select id="f_${name}" name="${name}">${options.map(o=>`<option ${o===value?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`;}
 function textarea(label,name,value=""){return `<div class="field"><label for="f_${name}">${label}</label><textarea id="f_${name}" name="${name}">${esc(value)}</textarea></div>`;}
-function openModal(title,html,handler){document.querySelector("#modal .modal-actions").innerHTML=`<button class="btn secondary" value="cancel">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button>`;document.getElementById("modalBody").innerHTML=`<h2>${title}</h2>${html}`;modalHandler=handler;pads={};document.getElementById("modal").showModal();bindModalActions();}
+function openModal(title,html,handler){document.querySelector("#modal .modal-actions").innerHTML=`<button type="button" class="btn secondary" value="cancel" onclick="document.getElementById('modal').close()">Cancelar</button><button class="btn primary" id="modalSave" value="default">Salvar</button>`;document.getElementById("modalBody").innerHTML=`<h2>${title}</h2>${html}`;modalHandler=handler;pads={};document.getElementById("modal").showModal();bindModalActions();}
 function bindModalActions(){
   document.querySelectorAll("#modal [data-action]").forEach(b=>{
     b.addEventListener("click",()=>{
