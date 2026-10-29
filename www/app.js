@@ -1140,7 +1140,8 @@ async function generatePdf(o){
       }
       y+=photoH+10;
     }
-    const tech=o.technicianSignature||state.settings.technicianSignature,client=o.clientSignature;
+    const tech=o.technicianSignature||state.settings.technicianSignature;
+    const client=o.updatedAt ? "" : o.clientSignature;
     if(tech||client){if(y>245)newPage();else y+=4;
       doc.setFillColor(...GREEN);doc.roundedRect(left,y,width,9,1.5,1.5,"F");doc.setTextColor(...WHITE);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.text("ASSINATURAS",left+4,y+6);y+=14;
       const sigW=80,sigH=29;
