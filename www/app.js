@@ -984,7 +984,15 @@ function editOrder(o){
     };
 
     const previousState=JSON.stringify(state);
-    const previousOrder=structuredClone(o);
+
+const {
+  photoBefore,
+  photoAfter,
+  clientSignature,
+  technicianSignature,
+  revisionHistory,
+  ...previousOrder
+}=o;
 
     const revision={
       number:(o.revisionHistory?.length||0)+1,
