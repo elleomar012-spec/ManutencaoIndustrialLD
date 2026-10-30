@@ -890,7 +890,7 @@ function newOrder(assetId=""){
     const service=fd.get("service").trim();if(!service)throw Error("Descreva o serviço executado.");
     const selected=String(fd.get("assetId")).split("|")[0],a=assetById(selected);if(!a)throw Error("Selecione um equipamento válido.");
     const photosBefore=[];
-const photosAfter=[];
+    const photosAfter=[];
 
 for(let i=1;i<=3;i++){
   const before=await readPhoto(
