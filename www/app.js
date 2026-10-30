@@ -1065,7 +1065,31 @@ function viewOrder(o){
   const a=assetById(o.assetId);
   openModal("Detalhes da manutenção",`<div class="note"><b>${esc(o.id)} · ${esc(o.type)}</b><br>${esc(a?.name||"Equipamento")} · ${fmtDate(o.serviceDate)}</div>
   <p><b>Defeito / motivo:</b> ${esc(o.defect||"—")}</p><p><b>Diagnóstico:</b><br>${esc(o.diagnosis||"—")}</p><p><b>Serviço executado:</b><br>${esc(o.service||"—")}</p><p><b>Peças substituídas:</b><br>${esc(o.parts||"—")}</p><p><b>Recomendações:</b><br>${esc(o.recommendation||"—")}</p><p><b>Próxima manutenção:</b> ${fmtDate(o.nextMaintenance)}</p>
-  <div class="photo-grid">${o.photoBefore?`<div><b>ANTES</b><img class="preview" src="${o.photoBefore}"></div>`:""}${o.photoAfter?`<div><b>DEPOIS</b><img class="preview" src="${o.photoAfter}"></div>`:""}</div>
+  
+<div class="photo-grid">
+  ${(
+    Array.isArray(o.photosBefore) && o.photosBefore.length
+      ? o.photosBefore
+      : o.photoBefore ? [o.photoBefore] : []
+  ).slice(0,3).map((foto,i)=>`
+    <div>
+      <b>ANTES — Foto ${i+1}</b>
+      <img class="preview" src="${foto}">
+    </div>
+  `).join("")}
+
+  ${(
+    Array.isArray(o.photosAfter) && o.photosAfter.length
+      ? o.photosAfter
+      : o.photoAfter ? [o.photoAfter] : []
+  ).slice(0,3).map((foto,i)=>`
+    <div>
+      <b>DEPOIS — Foto ${i+1}</b>
+      <img class="preview" src="${foto}">
+    </div>
+  `).join("")}
+</div>
+
   <div class="actions">
     <button type="button" class="btn secondary" data-action="edit-order" data-id="${esc(o.id)}">✏️ Editar OS</button>
     <button type="button" class="btn primary" data-action="pdf" data-id="${esc(o.id)}">Gerar PDF / compartilhar</button>
