@@ -991,6 +991,21 @@ function editOrder(o){
     if(!selectedEquipment){
       throw Error("Selecione um equipamento válido.");
     }
+  
+    const novasFotosAntes=[];
+    const novasFotosDepois=[];
+
+for(let i=1;i<=3;i++){
+  novasFotosAntes.push(await readPhoto(
+    fd.get(`before${i}Gallery`),
+    fd.get(`before${i}Camera`)
+  ));
+
+  novasFotosDepois.push(await readPhoto(
+    fd.get(`after${i}Gallery`),
+    fd.get(`after${i}Camera`)
+  ));
+}
 
     const changes={
       assetId:selectedEquipment.id,
