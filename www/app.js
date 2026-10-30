@@ -997,6 +997,7 @@ const {
 
   const hasChanges=Object.keys(changes).some(
   key=>key!=="updatedAt" &&
+     key!=="clientSignatureStatus" &&
   String(o[key]??"")!==String(changes[key]??"")
 );
 
