@@ -1025,7 +1025,7 @@ if(!hasChanges && !statusChanged){
       selectedEquipment.status=fd.get("assetStatus");
 
       selectedEquipment.nextMaintenance=changes.nextMaintenance||"";
-      }
+      
 
       if(!saveState()){
         throw Error("Não foi possível salvar a edição.");
