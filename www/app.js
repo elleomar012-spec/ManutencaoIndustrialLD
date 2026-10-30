@@ -1024,8 +1024,7 @@ if(!hasChanges && !statusChanged){
 
       selectedEquipment.status=fd.get("assetStatus");
 
-      if(changes.nextMaintenance){
-        selectedEquipment.nextMaintenance=changes.nextMaintenance;
+      selectedEquipment.nextMaintenance=changes.nextMaintenance||"";
       }
 
       if(!saveState()){
