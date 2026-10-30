@@ -980,6 +980,7 @@ function editOrder(o){
       parts:fd.get("parts"),
       recommendation:fd.get("recommendation"),
       nextMaintenance:fd.get("nextMaintenance"),
+      clientSignatureStatus:"Pendente de nova assinatura",
       updatedAt:new Date().toISOString()
     };
 
