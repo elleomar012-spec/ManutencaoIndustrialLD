@@ -972,10 +972,15 @@ function editOrder(o){
     ${textarea("Peças substituídas","parts",o.parts||"")}
     ${textarea("Recomendações","recommendation",o.recommendation||"")}
     ${field("Próxima manutenção","nextMaintenance",o.nextMaintenance||"","date")}
-    <div class="note">
-      As fotografias e assinaturas originais serão preservadas nesta edição.
-      A substituição de fotos será adicionada em uma próxima etapa.
-    </div>
+    <div class="photo-grid">
+  ${photoFields("before","Fotos ANTES")}
+  ${photoFields("after","Fotos DEPOIS")}
+</div>
+<div class="note">
+  As fotografias existentes serão mantidas se nenhuma
+  nova imagem for selecionada.
+  As assinaturas originais permanecerão armazenadas.
+</div>
   `,async fd=>{
     const service=String(fd.get("service")||"").trim();
     if(!service)throw Error("Descreva o serviço executado.");
