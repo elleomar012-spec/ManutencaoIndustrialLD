@@ -889,8 +889,23 @@ function newOrder(assetId=""){
   async fd=>{
     const service=fd.get("service").trim();if(!service)throw Error("Descreva o serviço executado.");
     const selected=String(fd.get("assetId")).split("|")[0],a=assetById(selected);if(!a)throw Error("Selecione um equipamento válido.");
-    const before=await readPhoto(fd.get("beforeGallery"),fd.get("beforeCamera"));
-    const after=await readPhoto(fd.get("afterGallery"),fd.get("afterCamera"));
+    const photosBefore=[];
+const photosAfter=[];
+
+for(let i=1;i<=3;i++){
+  const before=await readPhoto(
+    fd.get(`before${i}Gallery`),
+    fd.get(`before${i}Camera`)
+  );
+
+  const after=await readPhoto(
+    fd.get(`after${i}Gallery`),
+    fd.get(`after${i}Camera`)
+  );
+
+  if(before)photosBefore.push(before);
+  if(after)photosAfter.push(after);
+}
     const clientPad=document.getElementById("clientPad");
     const clientSignature=pads.clientPad?.drawn&&clientPad?clientPad.toDataURL("image/png"):"";
     const o={id:nextId("OS","nextOrder"),assetId:a.id,type:fd.get("type"),serviceDate:fd.get("serviceDate"),technician:fd.get("technician"),defect:fd.get("defect"),diagnosis:fd.get("diagnosis"),service,parts:fd.get("parts"),recommendation:fd.get("recommendation"),nextMaintenance:fd.get("nextMaintenance"),photoBefore:before,photoAfter:after,clientSignature,technicianSignature:state.settings.technicianSignature||"",status:"Concluída",created:new Date().toISOString()};
