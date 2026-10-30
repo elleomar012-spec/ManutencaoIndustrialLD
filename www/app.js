@@ -1203,17 +1203,76 @@ async function generatePdf(o){
     section("Peças substituídas",o.parts);
     section("Recomendações",o.recommendation);
     section("Próxima manutenção",fmtDate(o.nextMaintenance));
-    if(o.photoBefore||o.photoAfter){
-      newPage();
-      doc.setFillColor(...GREEN);doc.roundedRect(left,y,width,9,1.5,1.5,"F");doc.setTextColor(...WHITE);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.text("REGISTRO FOTOGRÁFICO",left+4,y+6);y+=16;
-      const photoW=83,photoH=100,gap=12;
-      for(const [label,data,x] of [["ANTES",o.photoBefore,left],["DEPOIS",o.photoAfter,left+photoW+gap]]){
-        if(!data)continue;
-        doc.setFillColor(...PALE);doc.roundedRect(x,y,photoW,photoH,2,2,"F");doc.setTextColor(...GREEN);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.text(label,x+4,y+8);
-        try{const fmt=data.startsWith("data:image/png")?"PNG":"JPEG";doc.addImage(data,fmt,x+4,y+14,photoW-8,photoH-20,undefined,"FAST");}catch(e){doc.setTextColor(...INK);doc.setFontSize(8);doc.text("Imagem indisponível",x+4,y+25);}
+    
+const fotosAntes=(
+  Array.isArray(o.photosBefore) && o.photosBefore.length
+    ? o.photosBefore
+    : o.photoBefore ? [o.photoBefore] : []
+).filter(Boolean).slice(0,3);
+
+const fotosDepois=(
+  Array.isArray(o.photosAfter) && o.photosAfter.length
+    ? o.photosAfter
+    : o.photoAfter ? [o.photoAfter] : []
+).filter(Boolean).slice(0,3);
+
+if(fotosAntes.length || fotosDepois.length){
+  const photoW=83;
+  const photoH=100;
+  const gap=12;
+
+  for(const [titulo,fotos] of [
+    ["ANTES DA MANUTENÇÃO",fotosAntes],
+    ["DEPOIS DA MANUTENÇÃO",fotosDepois]
+  ]){
+    if(!fotos.length)continue;
+
+    newPage();
+
+    doc.setFillColor(...GREEN);
+    doc.roundedRect(left,y,width,9,1.5,1.5,"F");
+    doc.setTextColor(...WHITE);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(10);
+    doc.text(titulo,left+4,y+6);
+    y+=16;
+
+    for(let i=0;i<fotos.length;i++){
+      if(i===2){
+        y+=photoH+10;
       }
-      y+=photoH+10;
+
+      const x=i===1 ? left+photoW+gap : left;
+
+      doc.setFillColor(...PALE);
+      doc.roundedRect(x,y,photoW,photoH,2,2,"F");
+
+      doc.setTextColor(...GREEN);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(10);
+      doc.text("FOTO "+(i+1),x+4,y+8);
+
+      try{
+        const data=fotos[i];
+        const fmt=data.startsWith("data:image/png")
+          ? "PNG" : "JPEG";
+
+        doc.addImage(
+          data,fmt,
+          x+4,y+14,
+          photoW-8,photoH-20,
+          undefined,"FAST"
+        );
+      }catch(e){
+        doc.setTextColor(...INK);
+        doc.setFontSize(8);
+        doc.text("Imagem indisponível",x+4,y+25);
+      }
     }
+
+    y+=photoH+10;
+  }
+}
     const tech=o.technicianSignature||state.settings.technicianSignature;
     const client=o.updatedAt ? "" : o.clientSignature;
     if(tech||client){if(y>245)newPage();else y+=4;
