@@ -1071,23 +1071,19 @@ function viewOrder(o){
     Array.isArray(o.photosBefore) && o.photosBefore.length
       ? o.photosBefore
       : o.photoBefore ? [o.photoBefore] : []
-  ).slice(0,3).map((foto,i)=>`
-    <div>
-      <b>ANTES — Foto ${i+1}</b>
-      <img class="preview" src="${foto}">
-    </div>
-  `).join("")}
+  ).slice(0,3).map((foto,i)=>
+  '<div><b>ANTES — Foto '+(i+1)+'</b>'+
+  '<img class="preview" src="'+foto+'"></div>'
+).join("")}
 
   ${(
     Array.isArray(o.photosAfter) && o.photosAfter.length
       ? o.photosAfter
       : o.photoAfter ? [o.photoAfter] : []
-  ).slice(0,3).map((foto,i)=>`
-    <div>
-      <b>DEPOIS — Foto ${i+1}</b>
-      <img class="preview" src="${foto}">
-    </div>
-  `).join("")}
+  ).slice(0,3).map((foto,i)=>
+  '<div><b>DEPOIS — Foto '+(i+1)+'</b>'+
+  '<img class="preview" src="'+foto+'"></div>'
+).join("")}
 </div>
 
   <div class="actions">
