@@ -908,7 +908,10 @@ for(let i=1;i<=3;i++){
 }
     const clientPad=document.getElementById("clientPad");
     const clientSignature=pads.clientPad?.drawn&&clientPad?clientPad.toDataURL("image/png"):"";
-    const o={id:nextId("OS","nextOrder"),assetId:a.id,type:fd.get("type"),serviceDate:fd.get("serviceDate"),technician:fd.get("technician"),defect:fd.get("defect"),diagnosis:fd.get("diagnosis"),service,parts:fd.get("parts"),recommendation:fd.get("recommendation"),nextMaintenance:fd.get("nextMaintenance"),photoBefore:before,photoAfter:after,clientSignature,technicianSignature:state.settings.technicianSignature||"",status:"Concluída",created:new Date().toISOString()};
+    const o={id:nextId("OS","nextOrder"),assetId:a.id,type:fd.get("type"),serviceDate:fd.get("serviceDate"),technician:fd.get("technician"),defect:fd.get("defect"),diagnosis:fd.get("diagnosis"),service,parts:fd.get("parts"),recommendation:fd.get("recommendation"),nextMaintenance:fd.get("nextMaintenance"),photoBefore:photosBefore[0]||"",
+photoAfter:photosAfter[0]||"",
+photosBefore:photosBefore,
+photosAfter:photosAfter,clientSignature,technicianSignature:state.settings.technicianSignature||"",status:"Concluída",created:new Date().toISOString()};
     state.orders.push(o);a.status=fd.get("assetStatus");a.nextMaintenance=o.nextMaintenance||a.nextMaintenance;
     if(saveState()){document.getElementById("modal").close();modalHandler=null;render();scheduleReminder(a);setTimeout(()=>{if(confirm("Manutenção salva. Deseja gerar o PDF e compartilhar agora?"))generatePdf(o);},100);}
   });
