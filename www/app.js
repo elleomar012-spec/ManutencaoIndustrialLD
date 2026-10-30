@@ -1041,8 +1041,12 @@ const {
 
 const statusChanged=
   selectedEquipment.status!==fd.get("assetStatus");
-
-if(!hasChanges && !statusChanged){
+    
+const photosChanged=
+  novasFotosAntes.some(foto=>Boolean(foto)) ||
+  novasFotosDepois.some(foto=>Boolean(foto));
+    
+if(!hasChanges && !statusChanged && !photosChanged){
   throw Error("Nenhuma alteração foi realizada nesta OS.");
 }
     
