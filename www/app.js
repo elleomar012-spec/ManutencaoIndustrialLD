@@ -1120,8 +1120,10 @@ function viewOrder(o){
       ? o.photosBefore
       : o.photoBefore ? [o.photoBefore] : []
   ).slice(0,3).map((foto,i)=>
-  '<div><b>ANTES — Foto '+(i+1)+'</b>'+
-  '<img class="preview" src="'+foto+'"></div>'
+  foto
+    ? '<div><b>ANTES — Foto '+(i+1)+'</b>'+
+      '<img class="preview" src="'+foto+'"></div>'
+    : ''
 ).join("")}
 
   ${(
