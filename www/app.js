@@ -1058,6 +1058,30 @@ if(!hasChanges && !statusChanged && !photosChanged){
 
     try{
       Object.assign(o,changes);
+      
+const fotosAntesAtuais=Array.isArray(o.photosBefore)
+  ? [...o.photosBefore]
+  : o.photoBefore ? [o.photoBefore] : [];
+
+const fotosDepoisAtuais=Array.isArray(o.photosAfter)
+  ? [...o.photosAfter]
+  : o.photoAfter ? [o.photoAfter] : [];
+
+for(let i=0;i<3;i++){
+  if(novasFotosAntes[i]){
+    fotosAntesAtuais[i]=novasFotosAntes[i];
+  }
+
+  if(novasFotosDepois[i]){
+    fotosDepoisAtuais[i]=novasFotosDepois[i];
+  }
+}
+
+o.photosBefore=fotosAntesAtuais;
+o.photosAfter=fotosDepoisAtuais;
+
+o.photoBefore=fotosAntesAtuais[0]||"";
+o.photoAfter=fotosDepoisAtuais[0]||"";
 
       o.revisionHistory=[
         ...(o.revisionHistory||[]),
