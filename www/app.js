@@ -1290,11 +1290,13 @@ if(fotosAntes.length || fotosDepois.length){
     y+=16;
 
     for(let i=0;i<fotos.length;i++){
-      if(i===2){
-        y+=photoH+10;
-      }
+  const posicao=fotos[i].numero-1;
 
-      const x=i===1 ? left+photoW+gap : left;
+  if(posicao===2){
+    y+=photoH+10;
+  }
+
+  const x=posicao===1 ? left+photoW+gap : left;
 
       doc.setFillColor(...PALE);
       doc.roundedRect(x,y,photoW,photoH,2,2,"F");
