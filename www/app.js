@@ -1131,8 +1131,10 @@ function viewOrder(o){
       ? o.photosAfter
       : o.photoAfter ? [o.photoAfter] : []
   ).slice(0,3).map((foto,i)=>
-  '<div><b>DEPOIS — Foto '+(i+1)+'</b>'+
-  '<img class="preview" src="'+foto+'"></div>'
+  foto
+    ? '<div><b>DEPOIS — Foto '+(i+1)+'</b>'+
+      '<img class="preview" src="'+foto+'"></div>'
+    : ''
 ).join("")}
 </div>
 
