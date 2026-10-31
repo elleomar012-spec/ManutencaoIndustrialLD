@@ -1260,13 +1260,13 @@ const fotosAntes=(
   Array.isArray(o.photosBefore) && o.photosBefore.length
     ? o.photosBefore
     : o.photoBefore ? [o.photoBefore] : []
-).filter(Boolean).slice(0,3);
+).slice(0,3).map((foto,i)=>({foto,numero:i+1})).filter(item=>Boolean(item.foto));
 
 const fotosDepois=(
   Array.isArray(o.photosAfter) && o.photosAfter.length
     ? o.photosAfter
     : o.photoAfter ? [o.photoAfter] : []
-).filter(Boolean).slice(0,3);
+).slice(0,3).map((foto,i)=>({foto,numero:i+1})).filter(item=>Boolean(item.foto));
 
 if(fotosAntes.length || fotosDepois.length){
   const photoW=83;
