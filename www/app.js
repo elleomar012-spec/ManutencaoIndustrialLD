@@ -1302,10 +1302,10 @@ if(fotosAntes.length || fotosDepois.length){
       doc.setTextColor(...GREEN);
       doc.setFont("helvetica","bold");
       doc.setFontSize(10);
-      doc.text("FOTO "+(i+1),x+4,y+8);
+      doc.text("FOTO "+fotos[i].numero,x+4,y+8);
 
       try{
-        const data=fotos[i];
+        const data=fotos[i].foto;
         const fmt=data.startsWith("data:image/png")
           ? "PNG" : "JPEG";
 
