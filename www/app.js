@@ -1113,13 +1113,15 @@ if(!hasChanges && !statusChanged && !photosChanged){
     try{
       Object.assign(o,changes);
       
-const fotosAntesAtuais=Array.isArray(o.photosBefore)
-  ? [...o.photosBefore]
-  : o.photoBefore ? [o.photoBefore] : [];
+const fotosAntesAtuais=
+  Array.isArray(o.photosBefore) && o.photosBefore.length
+    ? [...o.photosBefore]
+    : o.photoBefore ? [o.photoBefore] : [];
 
-const fotosDepoisAtuais=Array.isArray(o.photosAfter)
-  ? [...o.photosAfter]
-  : o.photoAfter ? [o.photoAfter] : [];
+const fotosDepoisAtuais=
+  Array.isArray(o.photosAfter) && o.photosAfter.length
+    ? [...o.photosAfter]
+    : o.photoAfter ? [o.photoAfter] : [];
 
 for(let i=0;i<3;i++){
   if(novasFotosAntes[i]){
