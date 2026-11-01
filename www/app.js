@@ -903,8 +903,8 @@ for(let i=1;i<=3;i++){
     fd.get(`after${i}Camera`)
   );
 
-  if(before)photosBefore.push(before);
-  if(after)photosAfter.push(after);
+  if(before)photosBefore[i-1]=before;
+if(after)photosAfter[i-1]=after;
 }
     const clientPad=document.getElementById("clientPad");
     const clientSignature=pads.clientPad?.drawn&&clientPad?clientPad.toDataURL("image/png"):"";
