@@ -872,8 +872,35 @@ function newAsset(a){
   alert("Equipamento excluído com sucesso.");
   render();
 } 
+
 function photoFields(which,label){
-  return `<div class="photo-box"><b>${label}</b><div class="field"><label>Escolher da galeria</label><input type="file" name="${which}Gallery" accept="image/*"></div><div class="field"><label>Tirar foto agora</label><input type="file" name="${which}Camera" accept="image/*" capture="environment"></div><img id="preview_${which}" class="preview hidden" alt="Prévia da foto"></div>`;
+  let html=`<div class="photo-box"><b>${label}</b>`;
+
+  for(let i=1;i<=3;i++){
+    html+=`
+      <div class="field">
+        <label>${label} — Foto ${i}</label>
+
+        <label>Escolher da galeria</label>
+        <input
+          type="file"
+          name="${which}${i}Gallery"
+          accept="image/*"
+        >
+
+        <label>Tirar foto agora</label>
+        <input
+          type="file"
+          name="${which}${i}Camera"
+          accept="image/*"
+          capture="environment"
+        >
+      </div>
+    `;
+  }
+
+  html+=`</div>`;
+  return html;
 }
 function newOrder(assetId=""){
   if(!state.assets.length){alert("Cadastre um equipamento antes de registrar uma manutenção.");view="assets";render();return;}
