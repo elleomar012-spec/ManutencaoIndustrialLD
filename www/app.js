@@ -1292,9 +1292,7 @@ if(fotosAntes.length || fotosDepois.length){
     for(let i=0;i<fotos.length;i++){
   const posicao=fotos[i].numero-1;
 
-  if(posicao===2 && i===0){
-  y+=photoH+10;
-}else if(posicao===2 && i>0){
+  if(posicao===2){
   y+=photoH+10;
 }
 
