@@ -1079,6 +1079,8 @@ for(let i=1;i<=3;i++){
 const {
   photoBefore,
   photoAfter,
+  photosBefore,
+  photosAfter,
   clientSignature,
   technicianSignature,
   revisionHistory,
