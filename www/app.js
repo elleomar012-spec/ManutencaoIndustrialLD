@@ -1134,8 +1134,8 @@ for(let i=0;i<3;i++){
 o.photosBefore=fotosAntesAtuais;
 o.photosAfter=fotosDepoisAtuais;
 
-o.photoBefore=fotosAntesAtuais[0]||"";
-o.photoAfter=fotosDepoisAtuais[0]||"";
+o.photoBefore="";
+o.photoAfter="";
 
       o.revisionHistory=[
         ...(o.revisionHistory||[]),
