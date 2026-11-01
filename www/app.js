@@ -1160,6 +1160,8 @@ o.photoAfter=fotosDepoisAtuais[0]||"";
 
     alert("OS "+o.id+" atualizada com sucesso!");
   });
+  
+  bindPhotoPreviews();
 }
 function viewOrder(o){
   const a=assetById(o.assetId);
