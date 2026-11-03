@@ -1110,20 +1110,37 @@ function editOrder(o){
       throw Error("Selecione um equipamento válido.");
     }
   
-    const novasFotosAntes=[];
-    const novasFotosDepois=[];
+    
+  const collectEditedPhotos=async which=>{
+  const galleryInput=document.querySelector(
+    `[name="${which}Gallery"]`
+  );
 
-for(let i=1;i<=3;i++){
-  novasFotosAntes.push(await readPhoto(
-    fd.get(`before${i}Gallery`),
-    fd.get(`before${i}Camera`)
-  ));
+  const cameraInput=document.querySelector(
+    `[name="${which}Camera"]`
+  );
 
-  novasFotosDepois.push(await readPhoto(
-    fd.get(`after${i}Gallery`),
-    fd.get(`after${i}Camera`)
-  ));
-}
+  const files=[
+    ...Array.from(galleryInput?.files||[]),
+    ...Array.from(cameraInput?.files||[])
+  ].filter(file=>file.size>0);
+
+  if(files.length>3){
+    throw Error("Selecione no máximo 3 fotos por grupo.");
+  }
+
+  const photos=[];
+
+  for(const file of files){
+    photos.push(await readPhoto(file,null));
+  }
+
+  return photos;
+};
+
+const novasFotosAntes=await collectEditedPhotos("before");
+const novasFotosDepois=await collectEditedPhotos("after");
+
 
     const changes={
       assetId:selectedEquipment.id,
