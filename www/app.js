@@ -927,23 +927,39 @@ function newOrder(assetId=""){
   async fd=>{
     const service=fd.get("service").trim();if(!service)throw Error("Descreva o serviço executado.");
     const selected=String(fd.get("assetId")).split("|")[0],a=assetById(selected);if(!a)throw Error("Selecione um equipamento válido.");
-    const photosBefore=[];
-    const photosAfter=[];
+    
+const collectPhotos=async which=>{
+  const gallery=fd.getAll(`${which}Gallery`)
+    .filter(file=>file instanceof File && file.size>0);
 
-for(let i=1;i<=3;i++){
-  const before=await readPhoto(
-    fd.get(`before${i}Gallery`),
-    fd.get(`before${i}Camera`)
+  const camera=fd.getAll(`${which}Camera`)
+    .filter(file=>file instanceof File && file.size>0);
+
+  const galleryInput=document.querySelector(
+    `[name="${which}Gallery"]`
   );
 
-  const after=await readPhoto(
-    fd.get(`after${i}Gallery`),
-    fd.get(`after${i}Camera`)
-  );
+  const files=[
+    ...Array.from(galleryInput?.files||[]),
+    ...camera
+  ];
 
-  if(before)photosBefore[i-1]=before;
-if(after)photosAfter[i-1]=after;
-}
+  if(files.length>3){
+    throw Error("Selecione no máximo 3 fotos por grupo.");
+  }
+
+  const photos=[];
+
+  for(const file of files){
+    const photo=await readPhoto(file,null);
+    if(photo)photos.push(photo);
+  }
+
+  return photos;
+};
+
+    const photosBefore=await collectPhotos("before");
+    const photosAfter=await collectPhotos("after");
     const clientPad=document.getElementById("clientPad");
     const clientSignature=pads.clientPad?.drawn&&clientPad?clientPad.toDataURL("image/png"):"";
     const previousState=JSON.stringify(state);
