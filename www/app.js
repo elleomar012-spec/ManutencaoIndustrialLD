@@ -873,35 +873,46 @@ function newAsset(a){
   render();
 } 
 
+
 function photoFields(which,label){
-  let html=`<div class="photo-box"><b>${label}</b>`;
+  return `
+    <div class="photo-box">
+      <b>${label}</b>
 
-  for(let i=1;i<=3;i++){
-    html+=`
       <div class="field">
-        <label>${label} — Foto ${i}</label>
-
-        <label>Escolher da galeria</label>
+        <label>Escolher até 3 fotos da galeria</label>
         <input
           type="file"
-          name="${which}${i}Gallery"
+          name="${which}Gallery"
           accept="image/*"
+          multiple
         >
+        <div class="mini">
+          Você pode selecionar 1, 2 ou 3 fotos de uma só vez.
+        </div>
+      </div>
 
-        <label>Tirar foto agora</label>
+      <div class="field">
+        <label>Tirar foto com a câmera</label>
         <input
           type="file"
-          name="${which}${i}Camera"
+          name="${which}Camera"
           accept="image/*"
           capture="environment"
         >
+        <div class="mini">
+          Você também pode registrar fotos pela câmera.
+        </div>
       </div>
-    `;
-  }
 
-  html+=`</div>`;
-  return html;
+      <div
+        id="preview_${which}"
+        class="photo-grid"
+      ></div>
+    </div>
+  `;
 }
+
 function newOrder(assetId=""){
   if(!state.assets.length){alert("Cadastre um equipamento antes de registrar uma manutenção.");view="assets";render();return;}
   const asset=assetById(assetId)||state.assets[0];
