@@ -984,40 +984,52 @@ function clearPad(id){const c=document.getElementById(id);if(c){c.getContext("2d
 
 function bindPhotoPreviews(){
   ["before","after"].forEach(which=>{
-    for(let i=1;i<=3;i++){
-      ["Gallery","Camera"].forEach(suffix=>{
-        const input=document.querySelector(
-          `[name="${which}${i}${suffix}"]`
-        );
+    const gallery=document.querySelector(
+      `[name="${which}Gallery"]`
+    );
+    const camera=document.querySelector(
+      `[name="${which}Camera"]`
+    );
+    const preview=document.getElementById(
+      `preview_${which}`
+    );
 
-        if(!input)return;
+    if(!preview)return;
 
-        input.addEventListener("change",()=>{
-          const file=input.files?.[0];
-          if(!file)return;
+    const updatePreview=()=>{
+      const galleryFiles=Array.from(gallery?.files||[]);
+      const cameraFiles=Array.from(camera?.files||[]);
+      const files=[...galleryFiles,...cameraFiles];
 
-          let img=document.getElementById(
-            `preview_${which}${i}`
-          );
-
-          if(!img){
-            img=document.createElement("img");
-            img.id=`preview_${which}${i}`;
-            img.className="preview";
-            input.parentElement.appendChild(img);
-          }
-
-          if(img.dataset.objectUrl){
-            URL.revokeObjectURL(img.dataset.objectUrl);
-          }
-
-          const url=URL.createObjectURL(file);
-          img.dataset.objectUrl=url;
-          img.src=url;
-          img.classList.remove("hidden");
-        });
+      preview.querySelectorAll("img").forEach(img=>{
+        if(img.dataset.objectUrl){
+          URL.revokeObjectURL(img.dataset.objectUrl);
+        }
       });
-    }
+      preview.innerHTML="";
+
+      if(files.length>3){
+        alert("Selecione no máximo 3 fotografias.");
+        if(gallery)gallery.value="";
+        if(camera)camera.value="";
+        return;
+      }
+
+      files.forEach((file,index)=>{
+        const img=document.createElement("img");
+        const url=URL.createObjectURL(file);
+
+        img.className="preview";
+        img.dataset.objectUrl=url;
+        img.src=url;
+        img.alt=`Foto ${index+1}`;
+
+        preview.appendChild(img);
+      });
+    };
+
+    gallery?.addEventListener("change",updatePreview);
+    camera?.addEventListener("change",updatePreview);
   });
 }
 
