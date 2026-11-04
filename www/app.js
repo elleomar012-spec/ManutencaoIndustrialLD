@@ -1349,11 +1349,24 @@ const {
   ...previousOrder
 }=o;
 
-  const hasChanges=Object.keys(changes).some(
-  key=>key!=="updatedAt" &&
-     key!=="clientSignatureStatus" &&
-  String(o[key]??"")!==String(changes[key]??"")
-);
+  
+const hasChanges=Object.keys(changes).some(key=>{
+  if(key==="updatedAt"||key==="clientSignatureStatus"){
+    return false;
+  }
+
+  if(key==="partsItems"){
+    const previousParts=Array.isArray(o.partsItems)
+      ?o.partsItems
+      :[];
+
+    return JSON.stringify(previousParts)!==
+      JSON.stringify(changes.partsItems);
+  }
+
+  return String(o[key]??"")!==String(changes[key]??"");
+});
+
 
 const statusChanged=
   selectedEquipment.status!==fd.get("assetStatus");
