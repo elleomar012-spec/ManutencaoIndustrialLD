@@ -1319,7 +1319,8 @@ function editOrder(o){
 const novasFotosAntes=await collectEditedPhotos("before");
 const novasFotosDepois=await collectEditedPhotos("after");
 
-
+const partsItems=collectPartsTable();
+    
     const changes={
       assetId:selectedEquipment.id,
       type:fd.get("type"),
@@ -1328,7 +1329,7 @@ const novasFotosDepois=await collectEditedPhotos("after");
       defect:fd.get("defect"),
       diagnosis:fd.get("diagnosis"),
       service,
-      parts:fd.get("parts"),
+      partsItems:partsItems,
       recommendation:fd.get("recommendation"),
       nextMaintenance:fd.get("nextMaintenance"),
       clientSignatureStatus:"Pendente de nova assinatura",
