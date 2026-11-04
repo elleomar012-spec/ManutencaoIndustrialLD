@@ -1131,6 +1131,7 @@ setTimeout(()=>{
   });
   initSignaturePad("clientPad");
   bindPhotoPreviews();
+  bindPartsTable();
 }
 function initSignaturePad(id){
   const c=document.getElementById(id);if(!c)return;
