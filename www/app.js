@@ -1506,7 +1506,7 @@ function displayPartsTable(o){
 function viewOrder(o){
   const a=assetById(o.assetId);
   openModal("Detalhes da manutenção",`<div class="note"><b>${esc(o.id)} · ${esc(o.type)}</b><br>${esc(a?.name||"Equipamento")} · ${fmtDate(o.serviceDate)}</div>
-  <p><b>Defeito / motivo:</b> ${esc(o.defect||"—")}</p><p><b>Diagnóstico:</b><br>${esc(o.diagnosis||"—")}</p><p><b>Serviço executado:</b><br>${esc(o.service||"—")}</p><p><b>Peças substituídas:</b><br>${esc(o.parts||"—")}</p><p><b>Recomendações:</b><br>${esc(o.recommendation||"—")}</p><p><b>Próxima manutenção:</b> ${fmtDate(o.nextMaintenance)}</p>
+  <p><b>Defeito / motivo:</b> ${esc(o.defect||"—")}</p><p><b>Diagnóstico:</b><br>${esc(o.diagnosis||"—")}</p><p><b>Serviço executado:</b><br>${esc(o.service||"—")}</p>${displayPartsTable(o)}<p><b>Recomendações:</b><br>${esc(o.recommendation||"—")}</p><p><b>Próxima manutenção:</b> ${fmtDate(o.nextMaintenance)}</p>
   
 <div class="photo-grid">
   ${(
