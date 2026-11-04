@@ -1443,6 +1443,66 @@ o.photoAfter="";
   bindPhotoPreviews();
   bindPartsTable(o.partsItems||[]);
 }
+  
+function displayPartsTable(o){
+  const parts=Array.isArray(o.partsItems)
+    ?o.partsItems
+    :[];
+
+  if(!parts.length){
+    return `<p><b>Peças substituídas:</b><br>${esc(o.parts||"—")}</p>`;
+  }
+
+  const money=value=>
+    Number(value||0).toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+
+  let total=0;
+
+  const rows=parts.map(part=>{
+    const quantity=Number(part.quantity)||0;
+    const unitPrice=Number(part.unitPrice)||0;
+    const subtotal=quantity*unitPrice;
+
+    total+=subtotal;
+
+    return `
+      <tr>
+        <td>${esc(part.name||"")}</td>
+        <td>${quantity}</td>
+        <td>${money(unitPrice)}</td>
+        <td>${money(subtotal)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <div class="field">
+      <b>Peças substituídas</b>
+
+      <div style="overflow-x:auto;margin-top:10px">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr>
+              <th>Peça</th>
+              <th>Qtd.</th>
+              <th>Valor un.</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+
+      <p style="text-align:right">
+        <b>Total das peças: ${money(total)}</b>
+      </p>
+    </div>
+  `;
+}
+
 function viewOrder(o){
   const a=assetById(o.assetId);
   openModal("Detalhes da manutenção",`<div class="note"><b>${esc(o.id)} · ${esc(o.type)}</b><br>${esc(a?.name||"Equipamento")} · ${fmtDate(o.serviceDate)}</div>
