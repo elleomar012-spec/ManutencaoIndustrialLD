@@ -874,6 +874,151 @@ function newAsset(a){
 } 
 
 
+function partsTable(){
+  return `
+    <div class="field" id="partsSection">
+      <label>Peças substituídas</label>
+      <div class="mini">
+        Adicione uma ou várias peças utilizadas na manutenção.
+      </div>
+
+      <div id="partsRows"></div>
+
+      <button
+        type="button"
+        class="btn secondary"
+        id="addPartBtn"
+      >
+        + Adicionar peça
+      </button>
+
+      <div style="margin-top:15px;text-align:right">
+        <b>Total das peças: </b>
+        <strong id="partsTotal">R$ 0,00</strong>
+      </div>
+    </div>
+  `;
+  }
+function partRow(part={}){
+  const name=esc(part.name||"");
+  const quantity=Number(part.quantity)||1;
+  const unitPrice=Number(part.unitPrice)||0;
+
+  return `
+    <div class="part-row" style="
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:12px;
+      margin:10px 0;
+    ">
+      <div class="field">
+        <label>Nome da peça</label>
+        <input
+          type="text"
+          class="part-name"
+          value="${name}"
+          placeholder="Ex.: Contatora WEG"
+        >
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Quantidade</label>
+          <input
+            type="number"
+            class="part-quantity"
+            min="1"
+            step="1"
+            value="${quantity}"
+          >
+        </div>
+
+        <div class="field">
+          <label>Valor unitário (R$)</label>
+          <input
+            type="number"
+            class="part-price"
+            min="0"
+            step="0.01"
+            value="${unitPrice}"
+          >
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <b>Subtotal: <span class="part-subtotal">R$ 0,00</span></b>
+        <button
+          type="button"
+          class="btn secondary remove-part"
+        >
+          Remover
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function bindPartsTable(existingParts=[]){
+  const rows=document.getElementById("partsRows");
+  const addBtn=document.getElementById("addPartBtn");
+  const totalEl=document.getElementById("partsTotal");
+
+  if(!rows||!addBtn||!totalEl)return;
+
+  const money=value=>
+    Number(value).toLocaleString("pt-BR",{
+      style:"currency",
+      currency:"BRL"
+    });
+
+  function calculate(){
+    let total=0;
+
+    rows.querySelectorAll(".part-row").forEach(row=>{
+      const quantity=Number(
+        row.querySelector(".part-quantity").value
+      )||0;
+
+      const price=Number(
+        row.querySelector(".part-price").value
+      )||0;
+
+      const subtotal=quantity*price;
+
+      row.querySelector(".part-subtotal").textContent=
+        money(subtotal);
+
+      total+=subtotal;
+    });
+
+    totalEl.textContent=money(total);
+  }
+
+  function addPart(part={}){
+    rows.insertAdjacentHTML("beforeend",partRow(part));
+    calculate();
+  }
+
+  addBtn.addEventListener("click",()=>{
+    addPart();
+  });
+
+  rows.addEventListener("input",calculate);
+
+  rows.addEventListener("click",event=>{
+    const button=event.target.closest(".remove-part");
+    if(!button)return;
+
+    button.closest(".part-row").remove();
+    calculate();
+  });
+
+  if(Array.isArray(existingParts)&&existingParts.length){
+    existingParts.forEach(addPart);
+  }else{
+    addPart();
+    }
+}
 function photoFields(which,label){
   return `
     <div class="photo-box">
