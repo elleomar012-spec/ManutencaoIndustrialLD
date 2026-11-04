@@ -1615,17 +1615,82 @@ async function generatePdf(o){
       const total=doc.getNumberOfPages();
       for(let i=1;i<=total;i++){doc.setPage(i);doc.setDrawColor(...GREEN);doc.setLineWidth(.5);doc.line(left,284,right,284);doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("LD AUTOMAÇÃO  ·  Transformando Energia em Resultados",left,290);doc.text(`Página ${i} de ${total}`,right,290,{align:"right"});}
     }
-    function newPage(){doc.addPage();header();watermark();y=44;}
+    function newPage(){doc.addPage();header();watermark();y=44;} 
     function section(title,content){
-      if(y>263)newPage();
-      doc.setFillColor(...GREEN);doc.roundedRect(left,y,width,8,1.5,1.5,"F");
-      doc.setTextColor(...WHITE);doc.setFont("helvetica","bold");doc.setFontSize(9);doc.text(title.toUpperCase(),left+4,y+5.3);y+=12;
-      const value=String(content||"—");doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...INK);
-      const lines=doc.splitTextToSize(value,width-8),h=Math.max(10,lines.length*4.8+5);
-      if(y+h>278){newPage();}
-      doc.setFillColor(...PALE);doc.roundedRect(left,y,width,h,1.5,1.5,"F");
-      doc.text(lines,left+4,y+6);y+=h+5;
+  const value=String(content??"").trim()||"—";
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(10);
+
+  const lines=doc.splitTextToSize(value,width-8);
+  const lineHeight=4.8;
+
+  function drawTitle(continued=false){
+    if(y>263)newPage();
+
+    doc.setFillColor(...GREEN);
+    doc.roundedRect(left,y,width,8,1.5,1.5,"F");
+
+    doc.setTextColor(...WHITE);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(9);
+
+    doc.text(
+      title.toUpperCase()+(continued?" (CONTINUAÇÃO)":""),
+      left+4,y+5.3
+    );
+
+    y+=12;
+  }
+
+  if(y+27>278)newPage();
+  drawTitle();
+
+  let index=0;
+
+  while(index<lines.length){
+    const availableHeight=278-y-5;
+    const maxLines=Math.floor(
+      (availableHeight-5)/lineHeight
+    );
+
+    if(maxLines<1){
+      newPage();
+      drawTitle(true);
+      continue;
     }
+
+    const chunk=lines.slice(
+      index,
+      index+maxLines
+    );
+
+    const h=Math.max(
+      10,
+      chunk.length*lineHeight+5
+    );
+
+    doc.setFillColor(...PALE);
+    doc.roundedRect(
+      left,y,width,h,1.5,1.5,"F"
+    );
+
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...INK);
+
+    doc.text(chunk,left+4,y+6);
+
+    y+=h+5;
+    index+=chunk.length;
+
+    if(index<lines.length){
+      newPage();
+      drawTitle(true);
+    }
+  }
+}
+
     function labelValue(label,value,x,yy,w){
       doc.setFont("helvetica","bold");doc.setFontSize(8);doc.setTextColor(...MUTED);doc.text(label.toUpperCase(),x,yy);
       doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...INK);
