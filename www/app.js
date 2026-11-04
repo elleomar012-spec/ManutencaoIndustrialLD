@@ -1138,6 +1138,7 @@ const collectPhotos=async which=>{
     const photosAfter=await collectPhotos("after");
     const clientPad=document.getElementById("clientPad");
     const clientSignature=pads.clientPad?.drawn&&clientPad?clientPad.toDataURL("image/png"):"";
+    const partsItems=collectPartsTable();
     const previousState=JSON.stringify(state);
     const o={id:nextId("OS","nextOrder"),assetId:a.id,type:fd.get("type"),serviceDate:fd.get("serviceDate"),technician:fd.get("technician"),defect:fd.get("defect"),diagnosis:fd.get("diagnosis"),service,parts:fd.get("parts"),recommendation:fd.get("recommendation"),nextMaintenance:fd.get("nextMaintenance"),photoBefore:"",
 photoAfter:"",
