@@ -1265,7 +1265,7 @@ function editOrder(o){
     ${field("Defeito / motivo da visita","defect",o.defect||"")}
     ${textarea("Diagnóstico","diagnosis",o.diagnosis||"")}
     ${textarea("Serviço executado *","service",o.service||"")}
-    ${textarea("Peças substituídas","parts",o.parts||"")}
+    ${partsTable()}
     ${textarea("Recomendações","recommendation",o.recommendation||"")}
     ${field("Próxima manutenção","nextMaintenance",o.nextMaintenance||"","date")}
     <div class="photo-grid">
