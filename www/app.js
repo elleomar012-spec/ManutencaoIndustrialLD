@@ -1065,7 +1065,7 @@ function newOrder(assetId=""){
   openModal("Nova manutenção",`${selectField("Equipamento *","assetId",state.assets.map(a=>a.id+"|"+a.code+" — "+a.name),asset.id+"|"+asset.code+" — "+asset.name)}
   <div class="grid2">${selectField("Tipo de manutenção","type",["Corretiva","Preventiva"],"Corretiva")}${selectField("Situação após o serviço","assetStatus",["Em operação","Em manutenção","Parado","Aguardando peças","Desativado"],asset.status)}</div>
   <div class="grid2">${field("Data do serviço *","serviceDate",today,"date")}${field("Técnico responsável","technician",state.settings.technician||"Léo")}</div>
-  ${field("Defeito / motivo da visita","defect","")}${textarea("Diagnóstico","diagnosis","")}${textarea("Serviço executado *","service","")}${textarea("Peças substituídas","parts","")}
+  ${field("Defeito / motivo da visita","defect","")}${textarea("Diagnóstico","diagnosis","")}${textarea("Serviço executado *","service","")}${partsTable()}
   <div class="photo-grid">${photoFields("before","Foto ANTES")}${photoFields("after","Foto DEPOIS")}</div>
   ${textarea("Recomendações","recommendation","")}${field("Próxima manutenção","nextMaintenance",asset.nextMaintenance||"","date")}
   <div class="field"><label>Assinatura do responsável pelo cliente (opcional)</label><canvas id="clientPad" class="signature-pad" width="600" height="180"></canvas><div class="pad-actions"><button type="button" class="btn secondary" data-action="clear-pad" data-pad="clientPad">Limpar assinatura</button></div><div class="mini">Assine com o dedo dentro do quadro branco.</div></div>`,
