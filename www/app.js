@@ -1018,6 +1018,37 @@ function bindPartsTable(existingParts=[]){
   }else{
     addPart();
     }
+  
+function collectPartsTable(){
+  const rows=document.querySelectorAll(
+    "#partsRows .part-row"
+  );
+
+  const parts=[];
+
+  rows.forEach(row=>{
+    const name=row.querySelector(
+      ".part-name"
+    ).value.trim();
+
+    const quantity=Number(
+      row.querySelector(".part-quantity").value
+    );
+
+    const unitPrice=Number(
+      row.querySelector(".part-price").value
+    );
+
+    if(!name)return;
+
+    parts.push({
+      name,
+      quantity:Math.max(1,quantity||1),
+      unitPrice:Math.max(0,unitPrice||0)
+    });
+  });
+
+  return parts;
 }
 function photoFields(which,label){
   return `
