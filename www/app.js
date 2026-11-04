@@ -1427,6 +1427,7 @@ o.photoAfter="";
   });
   
   bindPhotoPreviews();
+  bindPartsTable(o.partsItems||[]);
 }
 function viewOrder(o){
   const a=assetById(o.assetId);
