@@ -1140,7 +1140,7 @@ const collectPhotos=async which=>{
     const clientSignature=pads.clientPad?.drawn&&clientPad?clientPad.toDataURL("image/png"):"";
     const partsItems=collectPartsTable();
     const previousState=JSON.stringify(state);
-    const o={id:nextId("OS","nextOrder"),assetId:a.id,type:fd.get("type"),serviceDate:fd.get("serviceDate"),technician:fd.get("technician"),defect:fd.get("defect"),diagnosis:fd.get("diagnosis"),service,parts:fd.get("parts"),recommendation:fd.get("recommendation"),nextMaintenance:fd.get("nextMaintenance"),photoBefore:"",
+    const o={id:nextId("OS","nextOrder"),assetId:a.id,type:fd.get("type"),serviceDate:fd.get("serviceDate"),technician:fd.get("technician"),defect:fd.get("defect"),diagnosis:fd.get("diagnosis"),service,parts:"",partsItems:partsItems,recommendation:fd.get("recommendation"),nextMaintenance:fd.get("nextMaintenance"),photoBefore:"",
 photoAfter:"",
 photosBefore:photosBefore,
 photosAfter:photosAfter,clientSignature,technicianSignature:state.settings.technicianSignature||"",status:"Concluída",created:new Date().toISOString()};
