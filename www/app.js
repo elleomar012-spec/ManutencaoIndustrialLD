@@ -1862,9 +1862,12 @@ if(fotosAntes.length || fotosDepois.length){
     ["ANTES DA MANUTENÇÃO",fotosAntes],
     ["DEPOIS DA MANUTENÇÃO",fotosDepois]
   ]){
-    if(!fotos.length)continue;
+    
+if(!fotos.length)continue;
 
-    newPage();
+if(y+236>278){
+  newPage();
+}
 
     doc.setFillColor(...GREEN);
     doc.roundedRect(left,y,width,9,1.5,1.5,"F");
