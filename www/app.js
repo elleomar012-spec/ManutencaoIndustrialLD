@@ -1723,8 +1723,12 @@ async function generatePdf(o){
   y+=19;
 }
 
-    function section(title,content){
-  const value=String(content??"").trim()||"—";
+    
+function section(title,content){
+  const value=String(content??"").trim();
+
+  if(!value || value==="—")return;
+
 
   doc.setFont("helvetica","normal");
   doc.setFontSize(10);
