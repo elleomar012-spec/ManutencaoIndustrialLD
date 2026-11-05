@@ -1750,8 +1750,11 @@ async function generatePdf(o){
     y+=12;
   }
 
-  if(y+27>278)newPage();
-  drawTitle();
+  if(y+27>278){
+  newPage();
+}
+
+drawTitle();
 
   let index=0;
 
