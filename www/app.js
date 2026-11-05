@@ -1015,10 +1015,11 @@ function bindPartsTable(existingParts=[]){
 
   if(Array.isArray(existingParts)&&existingParts.length){
     existingParts.forEach(addPart);
-  }else{
+   }else{
     addPart();
-    }
-  
+  }
+}
+
 function collectPartsTable(){
   const rows=document.querySelectorAll(
     "#partsRows .part-row"
