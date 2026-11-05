@@ -1865,9 +1865,15 @@ if(fotosAntes.length || fotosDepois.length){
     
 if(!fotos.length)continue;
 
-if(y+236>278){
+
+const alturaFotos=fotos.length===3
+  ? 236
+  : 126;
+
+if(y+alturaFotos>278){
   newPage();
 }
+
 
     doc.setFillColor(...GREEN);
     doc.roundedRect(left,y,width,9,1.5,1.5,"F");
