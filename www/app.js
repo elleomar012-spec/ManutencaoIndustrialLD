@@ -1617,6 +1617,112 @@ async function generatePdf(o){
       for(let i=1;i<=total;i++){doc.setPage(i);doc.setDrawColor(...GREEN);doc.setLineWidth(.5);doc.line(left,284,right,284);doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("LD AUTOMAÇÃO  ·  Transformando Energia em Resultados",left,290);doc.text(`Página ${i} de ${total}`,right,290,{align:"right"});}
     }
     function newPage(){doc.addPage();header();watermark();y=44;} 
+    function pdfPartsTable(parts){
+  const money=value=>
+    "R$ "+Number(value||0).toLocaleString("pt-BR",{
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    });
+
+  const columns=[
+    {x:left+4,width:75},
+    {x:left+83,width:15},
+    {x:left+102,width:36},
+    {x:left+141,width:37}
+  ];
+
+  let total=0;
+
+  function tableHeader(continued=false){
+    if(y+35>278)newPage();
+
+    doc.setFillColor(...GREEN);
+    doc.roundedRect(left,y,width,9,1.5,1.5,"F");
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(9);
+    doc.setTextColor(...WHITE);
+    doc.text(
+      "PEÇAS SUBSTITUÍDAS"+(continued?" (CONTINUAÇÃO)":""),
+      left+4,y+6
+    );
+    y+=13;
+
+    doc.setFillColor(...PALE);
+    doc.rect(left,y,width,10,"F");
+    doc.setTextColor(...DARK);
+    doc.setFontSize(8);
+
+    doc.text("PEÇA",columns[0].x,y+6);
+    doc.text("QTD.",columns[1].x,y+6);
+    doc.text("UNITÁRIO",columns[2].x,y+6);
+    doc.text("SUBTOTAL",columns[3].x,y+6);
+
+    y+=10;
+  }
+
+  tableHeader();
+
+  parts.forEach(part=>{
+    const quantity=Number(part.quantity)||0;
+    const unitPrice=Number(part.unitPrice)||0;
+    const subtotal=quantity*unitPrice;
+    total+=subtotal;
+
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(8);
+
+    const nameLines=doc.splitTextToSize(
+      String(part.name||"Peça"),
+      columns[0].width
+    );
+
+    const rowHeight=Math.max(
+      12,
+      nameLines.length*4.5+5
+    );
+
+    if(y+rowHeight+15>278){
+      newPage();
+      tableHeader(true);
+    }
+
+    doc.setFillColor(247,250,248);
+    doc.rect(left,y,width,rowHeight,"F");
+
+    doc.setTextColor(...INK);
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(8);
+
+    doc.text(nameLines,columns[0].x,y+6);
+    doc.text(String(quantity),columns[1].x,y+6);
+    doc.text(money(unitPrice),columns[2].x,y+6);
+    doc.text(money(subtotal),columns[3].x,y+6);
+
+    doc.setDrawColor(215,225,219);
+    doc.line(left,y+rowHeight,right,y+rowHeight);
+
+    y+=rowHeight;
+  });
+
+  if(y+17>278){
+    newPage();
+    tableHeader(true);
+  }
+
+  doc.setFillColor(...PALE);
+  doc.roundedRect(left,y,width,14,1.5,1.5,"F");
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(10);
+  doc.setTextColor(...DARK);
+  doc.text("TOTAL DAS PEÇAS",left+4,y+9);
+
+  doc.setTextColor(...GREEN);
+  doc.text(money(total),right-4,y+9,{align:"right"});
+
+  y+=19;
+}
+
     function section(title,content){
   const value=String(content??"").trim()||"—";
 
