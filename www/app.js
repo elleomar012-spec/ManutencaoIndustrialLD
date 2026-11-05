@@ -1823,33 +1823,13 @@ const pdfParts=Array.isArray(o.partsItems)
   ?o.partsItems
   :[];
 
+
 if(pdfParts.length){
-  const money=value=>
-    Number(value||0).toLocaleString("pt-BR",{
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    });
-
-  let totalParts=0;
-
-  const partsLines=pdfParts.map((part,index)=>{
-    const quantity=Number(part.quantity)||0;
-    const unitPrice=Number(part.unitPrice)||0;
-    const subtotal=quantity*unitPrice;
-
-    totalParts+=subtotal;
-
-    return `${index+1}. ${part.name||"Peça"} | Qtd: ${quantity} | Unit.: R$ ${money(unitPrice)} | Subtotal: R$ ${money(subtotal)}`;
-  });
-
-  partsLines.push(
-    `TOTAL DAS PEÇAS: R$ ${money(totalParts)}`
-  );
-
-  section("Peças substituídas",partsLines.join("\n"));
+  pdfPartsTable(pdfParts);
 }else{
   section("Peças substituídas",o.parts);
 }
+
 
     section("Recomendações",o.recommendation);
     section("Próxima manutenção",fmtDate(o.nextMaintenance));
