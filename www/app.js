@@ -1584,7 +1584,18 @@ function companySettings(){
     if(!name){
       throw Error("Informe o nome da empresa.");
     }
+    
+const logoFile=document.getElementById("companyLogoFile")?.files?.[0];
 
+let companyLogo=state.settings.companyLogo||"";
+
+if(logoFile){
+  if(!["image/png","image/jpeg","image/webp"].includes(logoFile.type)){
+    throw Error("Selecione uma imagem PNG, JPG ou WebP.");
+  }
+
+  companyLogo=await imageToDataUrl(logoFile);
+}
     const previous=state.settings;
 
     state.settings={
