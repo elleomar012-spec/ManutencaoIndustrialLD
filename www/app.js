@@ -1595,7 +1595,7 @@ function companySettings(){
     Formatos aceitos: PNG, JPG e WebP.
   </p>
 </div>
-  `,fd=>{
+  `,async fd=>{
     const name=String(fd.get("companyName")||"").trim();
 
     if(!name){
@@ -1621,8 +1621,10 @@ if(logoFile){
       companyDocument:String(fd.get("companyDocument")||"").trim(),
       companyPhone:String(fd.get("companyPhone")||"").trim(),
       companyEmail:String(fd.get("companyEmail")||"").trim(),
-      companyAddress:String(fd.get("companyAddress")||"").trim()
-    };
+      companyAddress:String(fd.get("companyAddress")||"").trim(),
+      companyLogo:companyLogo
+      };
+
 
     if(!saveState()){
       state.settings=previous;
