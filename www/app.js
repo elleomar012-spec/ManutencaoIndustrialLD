@@ -1233,6 +1233,23 @@ function readPhoto(gallery,camera){
   if(!file)return Promise.resolve("");
   return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(new Error("Não foi possível ler uma das fotos."));reader.onload=()=>{const img=new Image();img.onload=()=>{const max=1100,scale=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext("2d").drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL("image/jpeg",0.68));};img.onerror=()=>reject(new Error("Arquivo de imagem inválido."));img.src=reader.result;};reader.readAsDataURL(file);});
 }
+  
+  async function imageToDataUrl(file){
+  if(!file)return "";
+
+  if(!["image/png","image/jpeg","image/webp"].includes(file.type)){
+    throw Error("Selecione uma imagem PNG, JPG ou WebP.");
+  }
+
+  const data=await readPhoto(file,null);
+
+  if(!data){
+    throw Error("Não foi possível processar o logotipo.");
+  }
+
+  return data;
+}
+
 function assetHistory(a){
   const list=state.orders.filter(o=>o.assetId===a.id).sort((x,y)=>(y.serviceDate||y.created||"").localeCompare(x.serviceDate||x.created||""));
   openModal("Histórico do equipamento",`<h3>${esc(a.name)} · ${esc(a.code)}</h3><p>${esc(a.client||"Cliente não informado")} · ${esc(a.sector||"Setor não informado")}</p><p>Situação atual: ${esc(a.status)}</p><hr>
