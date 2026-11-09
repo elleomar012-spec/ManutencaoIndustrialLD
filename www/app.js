@@ -1662,7 +1662,13 @@ async function generatePdf(o){
     function header(){
       doc.setFillColor(...DARK);doc.rect(0,0,pageW,34,"F");
       doc.setFillColor(...GREEN);doc.rect(0,34,pageW,2.5,"F");
-      doc.setTextColor(...WHITE);doc.setFont("helvetica","bold");doc.setFontSize(18);doc.text("LD AUTOMAÇÃO",left,12);
+      doc.setTextColor(...WHITE);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(18);
+
+   const companyName=String(state.settings.companyName||"Empresa / Profissional").trim();
+
+      doc.text(companyName,left,12,{maxWidth:180});
       doc.setFont("helvetica","normal");doc.setFontSize(9);doc.text("Transformando Energia em Resultados",left,19);
       doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
     }
