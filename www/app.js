@@ -1669,7 +1669,6 @@ async function generatePdf(o){
    const companyName=String(state.settings.companyName||"Empresa / Profissional").trim();
 
       doc.text(companyName,left,12,{maxWidth:180});
-      doc.setFont("helvetica","normal");doc.setFontSize(9);doc.text("Transformando Energia em Resultados",left,19);
       doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
     }
     function footer(){
