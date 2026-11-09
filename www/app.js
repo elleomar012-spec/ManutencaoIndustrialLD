@@ -1562,9 +1562,22 @@ function companySettings(){
 
     ${textarea("Endereço completo","companyAddress",s.companyAddress||"")}
 
-    <div class="note">
-      O logotipo personalizado será adicionado na próxima etapa.
-    </div>
+    
+<div class="note">
+  <strong>Logotipo da empresa / profissional</strong>
+  <p>Selecione uma imagem para personalizar seus relatórios e Ordens de Serviço.</p>
+
+  <input
+    type="file"
+    id="companyLogoFile"
+    accept="image/png,image/jpeg,image/webp"
+    style="width:100%;margin-top:10px"
+  >
+
+  <p class="mini">
+    Formatos aceitos: PNG, JPG e WebP.
+  </p>
+</div>
   `,fd=>{
     const name=String(fd.get("companyName")||"").trim();
 
