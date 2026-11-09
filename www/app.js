@@ -1582,6 +1582,17 @@ function companySettings(){
     
 <div class="note">
   <strong>Logotipo da empresa / profissional</strong>
+  ${s.companyLogo?`
+  <div style="margin:12px 0;text-align:center">
+    <img
+      src="${s.companyLogo}"
+      alt="Logotipo cadastrado"
+      style="max-width:180px;max-height:100px;object-fit:contain"
+    >
+    <p class="mini">Logotipo atual da empresa</p>
+  </div>
+`:""}
+
   <p>Selecione uma imagem para personalizar seus relatórios e Ordens de Serviço.</p>
 
   <input
