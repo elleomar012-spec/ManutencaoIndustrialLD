@@ -1660,13 +1660,21 @@ async function generatePdf(o){
     try{const response=await fetch('assets/ld-logo-watermark.png');if(response.ok){const blob=await response.blob();watermarkData=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob);});}}catch(e){console.warn('Logo da marca-d’água não carregada.',e);}
     function watermark(){if(!watermarkData)return;try{doc.addImage(watermarkData,'PNG',57,91,96,96,undefined,'FAST');}catch(e){console.warn('Não foi possível aplicar a marca-d’água.',e);}}
     function header(){
-      doc.setFillColor(...DARK);doc.rect(0,0,pageW,34,"F");
-      doc.setFillColor(...GREEN);doc.rect(0,34,pageW,2.5,"F");
+      
+      doc.setFillColor(...DARK);
+      doc.rect(0,0,pageW,52,"F");
+      doc.setFillColor(...GREEN);
+      doc.rect(0,52,pageW,2.5,"F");
       doc.setTextColor(...WHITE);
       doc.setFont("helvetica","bold");
       doc.setFontSize(18);
 
    const companyName=String(state.settings.companyName||"Empresa / Profissional").trim();
+   const companyDocument=String(state.settings.companyDocument||"").trim();
+   const companyPhone=String(state.settings.companyPhone||"").trim();
+   const companyEmail=String(state.settings.companyEmail||"").trim();
+   const companyAddress=String(state.settings.companyAddress||"").trim();
+   const companyLogo=state.settings.companyLogo||"";
 
       doc.text(companyName,left,12,{maxWidth:180});
       doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
