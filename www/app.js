@@ -1678,10 +1678,25 @@ async function generatePdf(o){
       doc.text(companyName,left,12,{maxWidth:180});
       doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
     }
-    function footer(){
-      const total=doc.getNumberOfPages();
-      for(let i=1;i<=total;i++){doc.setPage(i);doc.setDrawColor(...GREEN);doc.setLineWidth(.5);doc.line(left,284,right,284);doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("LD AUTOMAÇÃO  ·  Transformando Energia em Resultados",left,290);doc.text(`Página ${i} de ${total}`,right,290,{align:"right"});}
-    }
+    
+function footer(){
+  const total=doc.getNumberOfPages();
+  const companyName=String(state.settings.companyName||"Empresa / Profissional").trim();
+
+  for(let i=1;i<=total;i++){
+    doc.setPage(i);
+    doc.setDrawColor(...GREEN);
+    doc.setLineWidth(.5);
+    doc.line(left,284,right,284);
+
+    doc.setTextColor(...MUTED);
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(8);
+
+    doc.text(companyName,left,290,{maxWidth:145});
+    doc.text(`Página ${i} de ${total}`,right,290,{align:"right"});
+  }
+}
     function newPage(){
       doc.addPage();
       header();
