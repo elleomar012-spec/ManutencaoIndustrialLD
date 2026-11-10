@@ -1897,7 +1897,7 @@ drawTitle();
       doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...INK);
       const lines=doc.splitTextToSize(String(value||"—"),w);doc.text(lines,x,yy+5);return Math.max(12,lines.length*4.5+7);
     }
-    header();watermark();y=43;
+    header();watermark();y=62;
     doc.setFillColor(...PALE);doc.roundedRect(left,y,width,39,2,2,"F");
     const col1=left+5,col2=left+96;
     const h1=labelValue("Equipamento",a?.name,col1,y+7,83);
