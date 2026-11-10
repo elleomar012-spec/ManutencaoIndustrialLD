@@ -1682,7 +1682,13 @@ async function generatePdf(o){
       const total=doc.getNumberOfPages();
       for(let i=1;i<=total;i++){doc.setPage(i);doc.setDrawColor(...GREEN);doc.setLineWidth(.5);doc.line(left,284,right,284);doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("LD AUTOMAÇÃO  ·  Transformando Energia em Resultados",left,290);doc.text(`Página ${i} de ${total}`,right,290,{align:"right"});}
     }
-    function newPage(){doc.addPage();header();watermark();y=44;} 
+    function newPage(){
+      doc.addPage();
+      header();
+      watermark();
+      y=62;
+    }
+
     function pdfPartsTable(parts){
   const money=value=>
     "R$ "+Number(value||0).toLocaleString("pt-BR",{
