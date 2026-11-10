@@ -1727,10 +1727,11 @@ doc.addImage(
   const addressText="Endereço: "+companyAddress;
   const addressLines=doc.splitTextToSize(addressText,140);
 
-      doc.text(addressLines.slice(0,2),55,35);
-    }
+      
+  const addressLine=addressLines[0]||"";
 
-
+      doc.text(addressLine,55,35);
+      }
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
       doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,47);
