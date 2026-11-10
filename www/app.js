@@ -1677,7 +1677,21 @@ async function generatePdf(o){
 
 if(companyLogo){
   try{
-    doc.addImage(companyLogo,"JPEG",left,5,34,22);
+    
+const logoInfo=doc.getImageProperties(companyLogo);
+const scale=Math.min(34/logoInfo.width,22/logoInfo.height);
+const logoW=logoInfo.width*scale;
+const logoH=logoInfo.height*scale;
+
+doc.addImage(
+  companyLogo,
+  "JPEG",
+  left+(34-logoW)/2,
+  5+(22-logoH)/2,
+  logoW,
+  logoH
+);
+
   }catch(error){
     console.warn("Não foi possível inserir o logotipo no PDF.",error);
   }
