@@ -1727,7 +1727,11 @@ const displayedName=doc.splitTextToSize(
    if(companyPhone){
       doc.setFont("helvetica","normal");
       doc.setFontSize(8);
-      doc.text("Telefone: "+companyPhone,55,25,{maxWidth:140});
+   const phoneText="Telefone: "+companyPhone;
+   const phoneLine=doc.splitTextToSize(phoneText,140)[0]||"";
+
+      doc.text(phoneLine,55,25);
+
     }
 
     if(companyEmail){
