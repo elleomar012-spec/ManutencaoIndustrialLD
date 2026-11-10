@@ -1719,10 +1719,17 @@ const displayedName=doc.splitTextToSize(
       doc.text(displayedName,55,12);
       doc.setFont("helvetica","normal");
       doc.setFontSize(9);
+     
+if(companyDocument){
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9);
 
-   if(companyDocument){
-      doc.text("CPF/CNPJ: "+companyDocument,55,19,{maxWidth:140});
-   }
+  const documentText="CPF/CNPJ: "+companyDocument;
+  const documentLine=doc.splitTextToSize(documentText,140)[0]||"";
+
+  doc.text(documentLine,55,19);
+}
+
       
    if(companyPhone){
       doc.setFont("helvetica","normal");
