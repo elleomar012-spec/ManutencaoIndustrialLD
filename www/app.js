@@ -1696,10 +1696,27 @@ doc.addImage(
     console.warn("Não foi possível inserir o logotipo no PDF.",error);
   }
 }
-      
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(14);
-      doc.text(companyName,55,12,{maxWidth:140});
+            
+doc.setFont("helvetica","bold");
+doc.setFontSize(14);
+
+const maxNameWidth=140;
+let nameSize=14;
+
+while(
+  doc.getTextWidth(companyName)>maxNameWidth &&
+  nameSize>9
+){
+  nameSize-=0.5;
+  doc.setFontSize(nameSize);
+}
+
+const displayedName=doc.splitTextToSize(
+  companyName,
+  maxNameWidth
+)[0]||"";
+
+      doc.text(displayedName,55,12);
       doc.setFont("helvetica","normal");
       doc.setFontSize(9);
 
