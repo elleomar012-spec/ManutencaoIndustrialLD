@@ -1700,6 +1700,13 @@ doc.addImage(
       doc.setFont("helvetica","bold");
       doc.setFontSize(14);
       doc.text(companyName,55,12,{maxWidth:140});
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(9);
+
+if(companyDocument){
+  doc.text("CPF/CNPJ: "+companyDocument,55,19,{maxWidth:140});
+}
+
       doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
     }
     
