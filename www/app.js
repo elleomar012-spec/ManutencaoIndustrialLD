@@ -1733,12 +1733,18 @@ const displayedName=doc.splitTextToSize(
       doc.text(phoneLine,55,25);
 
     }
+     
+if(companyEmail){
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(8);
 
-    if(companyEmail){
-      doc.setFont("helvetica","normal");
-      doc.setFontSize(8);
-      doc.text("E-mail: "+companyEmail,55,30,{maxWidth:140});
-    }
+  const emailText="E-mail: "+companyEmail;
+  const emailLine=doc.splitTextToSize(emailText,140)[0]||"";
+
+  doc.text(emailLine,55,30);
+}
+
+    
       
     
     if(companyAddress){
