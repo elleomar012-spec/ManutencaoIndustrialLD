@@ -1657,7 +1657,6 @@ async function generatePdf(o){
     const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4"}),a=assetById(o.assetId);
     const GREEN=[28,126,78],DARK=[20,43,37],PALE=[232,246,237],INK=[38,51,46],MUTED=[100,115,107],WHITE=[255,255,255];
     const pageW=210,left=14,right=196,width=182;let y=0,watermarkData='';
-    try{const response=await fetch('assets/ld-logo-watermark.png');if(response.ok){const blob=await response.blob();watermarkData=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(blob);});}}catch(e){console.warn('Logo da marca-d’água não carregada.',e);}
     function watermark(){if(!watermarkData)return;try{doc.addImage(watermarkData,'PNG',57,91,96,96,undefined,'FAST');}catch(e){console.warn('Não foi possível aplicar a marca-d’água.',e);}}
     function header(){
       
