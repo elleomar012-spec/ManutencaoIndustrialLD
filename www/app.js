@@ -1675,6 +1675,13 @@ async function generatePdf(o){
    const companyAddress=String(state.settings.companyAddress||"").trim();
    const companyLogo=state.settings.companyLogo||"";
 
+if(companyLogo){
+  try{
+    doc.addImage(companyLogo,"JPEG",left,5,34,22);
+  }catch(error){
+    console.warn("Não foi possível inserir o logotipo no PDF.",error);
+  }
+}
       
       doc.setFont("helvetica","bold");
       doc.setFontSize(14);
