@@ -1703,10 +1703,22 @@ doc.addImage(
       doc.setFont("helvetica","normal");
       doc.setFontSize(9);
 
-if(companyDocument){
-  doc.text("CPF/CNPJ: "+companyDocument,55,19,{maxWidth:140});
-}
+   if(companyDocument){
+      doc.text("CPF/CNPJ: "+companyDocument,55,19,{maxWidth:140});
+   }
+      
+   if(companyPhone){
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.text("Telefone: "+companyPhone,55,25,{maxWidth:140});
+    }
 
+    if(companyEmail){
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.text("E-mail: "+companyEmail,55,30,{maxWidth:140});
+    }
+      
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
       doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,47);
