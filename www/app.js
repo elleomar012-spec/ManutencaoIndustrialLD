@@ -1675,7 +1675,10 @@ async function generatePdf(o){
    const companyAddress=String(state.settings.companyAddress||"").trim();
    const companyLogo=state.settings.companyLogo||"";
 
-      doc.text(companyName,left,12,{maxWidth:180});
+      
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(14);
+      doc.text(companyName,55,12,{maxWidth:140});
       doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
     }
     
