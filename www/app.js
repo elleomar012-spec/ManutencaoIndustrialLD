@@ -1719,6 +1719,14 @@ doc.addImage(
       doc.text("E-mail: "+companyEmail,55,30,{maxWidth:140});
     }
       
+    if(companyAddress){
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.text("Endereço: "+companyAddress,55,35,{
+    maxWidth:140
+  });
+}
+
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
       doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,47);
