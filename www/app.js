@@ -1707,7 +1707,10 @@ if(companyDocument){
   doc.text("CPF/CNPJ: "+companyDocument,55,19,{maxWidth:140});
 }
 
-      doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,28);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(12);
+      doc.text("RELATÓRIO DE CONCLUSÃO DE SERVIÇO",left,47);
+
     }
     
 function footer(){
