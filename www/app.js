@@ -1719,13 +1719,17 @@ doc.addImage(
       doc.text("E-mail: "+companyEmail,55,30,{maxWidth:140});
     }
       
+    
     if(companyAddress){
       doc.setFont("helvetica","normal");
       doc.setFontSize(8);
-      doc.text("Endereço: "+companyAddress,55,35,{
-    maxWidth:140
-  });
-}
+
+  const addressText="Endereço: "+companyAddress;
+  const addressLines=doc.splitTextToSize(addressText,140);
+
+      doc.text(addressLines.slice(0,2),55,35);
+    }
+
 
       doc.setFont("helvetica","bold");
       doc.setFontSize(12);
