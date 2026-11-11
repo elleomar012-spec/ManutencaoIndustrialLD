@@ -1795,8 +1795,16 @@ while(
 }
 
 if(footerName!==companyName){
-  footerName=footerName.slice(0,-3)+"...";
+  while(
+    doc.getTextWidth(footerName+"...")>footerMaxWidth &&
+    footerName.length>0
+  ){
+    footerName=footerName.slice(0,-1);
+  }
+
+  footerName+="...";
 }
+
 
 doc.text(footerName,left,290);
 
