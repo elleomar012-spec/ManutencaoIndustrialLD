@@ -2151,7 +2151,7 @@ const filename=`Relatorio-${(o.id||"OS").replace(/[^a-zA-Z0-9-]/g,"")}.pdf`;
  
     }else{
       const blob=doc.output("blob"),url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
-      if(navigator.share&&navigator.canShare){try{const file=new File([blob],filename,{type:"application/pdf"});if(navigator.canShare({files:[file]}))await navigator.share({files:[file],title:"Relatório de manutenção LD"});}catch(e){}}
+      if(navigator.share&&navigator.canShare){try{const file=new File([blob],filename,{type:"application/pdf"});if(navigator.canShare({files:[file]}))await navigator.share({files:[file],title:`Relatório de manutenção - ${shareCompanyName}` });}catch(e){}}
     }
   }catch(e){console.error(e);alert("Não foi possível gerar/compartilhar o PDF. Confira se a versão instalada foi compilada com os plugins atualizados.");}
 }
