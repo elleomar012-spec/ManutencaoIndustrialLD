@@ -2098,7 +2098,7 @@ for(let i=0;i<fotos.length;i++){
     : inicioFotos;
 
       doc.setFillColor(...PALE);
-      doc.roundedRect(x,y,photoW,photoH,2,2,"F");
+      doc.roundedRect(x,fotoY,photoW,photoH,2,2,"F");
 
       doc.setTextColor(...GREEN);
       doc.setFont("helvetica","bold");
