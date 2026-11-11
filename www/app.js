@@ -2111,12 +2111,13 @@ for(let i=0;i<fotos.length;i++){
         const fmt=data.startsWith("data:image/png")
           ? "PNG" : "JPEG";
 
-        doc.addImage(
-          data,fmt,
-          x+4,y+14,
-          photoW-8,photoH-20,
-          undefined,"FAST"
-        );
+        
+       doc.addImage(
+        data,fmt,
+        x+4,fotoY+14,
+        photoW-8,photoH-20,
+        undefined,"FAST"
+      );
       }catch(e){
         doc.setTextColor(...INK);
         doc.setFontSize(8);
