@@ -2131,7 +2131,13 @@ if(y+alturaFotos>278){
       if(client){const x=left+sigW+10;doc.setFillColor(...PALE);doc.roundedRect(x,y,sigW,sigH,2,2,"F");try{doc.addImage(client,"PNG",x+4,y+1,sigW-8,18);}catch(e){}doc.setDrawColor(...GREEN);doc.line(x+5,y+20,x+sigW-5,y+20);doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("Responsável pelo cliente",x+sigW/2,y+26,{align:"center"});}
     }
     footer();
-    const filename=`Relatorio-${(o.id||"OS").replace(/[^a-zA-Z0-9-]/g,"")}.pdf`;
+
+const shareCompanyName=String(
+  state.settings.companyName||"Empresa / Profissional"
+).trim();
+
+const filename=`Relatorio-${(o.id||"OS").replace(/[^a-zA-Z0-9-]/g,"")}.pdf`;
+
     const dataUri=doc.output("datauristring"),base64=dataUri.split(",")[1];
     const cap=window.Capacitor,plugins=cap?.Plugins||{};
     if(plugins.Filesystem&&plugins.Share){
