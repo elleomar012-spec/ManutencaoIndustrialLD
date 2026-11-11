@@ -1784,7 +1784,22 @@ function footer(){
     doc.setFont("helvetica","normal");
     doc.setFontSize(8);
 
-    doc.text(companyName,left,290,{maxWidth:145});
+ const footerMaxWidth=120;
+let footerName=companyName;
+
+while(
+  doc.getTextWidth(footerName)>footerMaxWidth &&
+  footerName.length>1
+){
+  footerName=footerName.slice(0,-1);
+}
+
+if(footerName!==companyName){
+  footerName=footerName.slice(0,-3)+"...";
+}
+
+doc.text(footerName,left,290);
+
     doc.text(`Página ${i} de ${total}`,right,290,{align:"right"});
   }
 }
