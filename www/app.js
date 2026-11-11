@@ -2083,15 +2083,19 @@ if(y+alturaFotos>278){
     doc.setFontSize(10);
     doc.text(titulo,left+4,y+6);
     y+=16;
+    
+const inicioFotos=y;
 
-    for(let i=0;i<fotos.length;i++){
+for(let i=0;i<fotos.length;i++){
   const posicao=fotos[i].numero-1;
 
-  if(posicao===2){
-  y+=photoH+10;
-}
+  const x=posicao===1
+    ? left+photoW+gap
+    : left;
 
-  const x=posicao===1 ? left+photoW+gap : left;
+  const fotoY=posicao===2
+    ? inicioFotos+photoH+10
+    : inicioFotos;
 
       doc.setFillColor(...PALE);
       doc.roundedRect(x,y,photoW,photoH,2,2,"F");
