@@ -2121,7 +2121,8 @@ for(let i=0;i<fotos.length;i++){
       }catch(e){
         doc.setTextColor(...INK);
         doc.setFontSize(8);
-        doc.text("Imagem indisponível",x+4,y+25);
+        doc.text("Imagem indisponível",x+4,fotoY+25);
+
       }
     }
 
