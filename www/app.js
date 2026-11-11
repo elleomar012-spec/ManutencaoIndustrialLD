@@ -1717,8 +1717,6 @@ const displayedName=doc.splitTextToSize(
 )[0]||"";
 
       doc.text(displayedName,55,12);
-      doc.setFont("helvetica","normal");
-      doc.setFontSize(9);
      
 if(companyDocument){
   doc.setFont("helvetica","normal");
