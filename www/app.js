@@ -2126,7 +2126,8 @@ for(let i=0;i<fotos.length;i++){
       }
     }
 
-    y+=photoH+10;
+    
+y=inicioFotos+(fotos.length===3 ? 2*photoH+10 : photoH)+10;
   }
 }
     const tech=o.technicianSignature||state.settings.technicianSignature;
