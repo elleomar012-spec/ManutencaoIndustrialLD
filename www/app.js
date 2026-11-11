@@ -2142,7 +2142,13 @@ const filename=`Relatorio-${(o.id||"OS").replace(/[^a-zA-Z0-9-]/g,"")}.pdf`;
     const cap=window.Capacitor,plugins=cap?.Plugins||{};
     if(plugins.Filesystem&&plugins.Share){
       const saved=await plugins.Filesystem.writeFile({path:filename,data:base64,directory:"CACHE",recursive:true});
-      await plugins.Share.share({title:"Relatório de manutenção LD",text:`Relatório ${o.id} - ${a?.name||"equipamento"}`,url:saved.uri,dialogTitle:"Compartilhar relatório PDF"});
+      await plugins.Share.share({
+  title:`Relatório de manutenção - ${shareCompanyName}`,
+  text:`Relatório ${o.id} - ${a?.name||"equipamento"}`,
+  url:saved.uri,
+  dialogTitle:"Compartilhar relatório PDF"
+});
+ 
     }else{
       const blob=doc.output("blob"),url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
       if(navigator.share&&navigator.canShare){try{const file=new File([blob],filename,{type:"application/pdf"});if(navigator.canShare({files:[file]}))await navigator.share({files:[file],title:"Relatório de manutenção LD"});}catch(e){}}
