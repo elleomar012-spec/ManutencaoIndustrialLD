@@ -2131,7 +2131,13 @@ for(let i=0;i<fotos.length;i++){
 }
     const tech=o.technicianSignature||state.settings.technicianSignature;
     const client=o.updatedAt ? "" : o.clientSignature;
-    if(tech||client){if(y>245)newPage();else y+=4;
+    if(tech||client){
+      if(y+4+14+29>278){
+        newPage();
+    }else{
+      y+=4;
+   }
+
       doc.setFillColor(...GREEN);doc.roundedRect(left,y,width,9,1.5,1.5,"F");doc.setTextColor(...WHITE);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.text("ASSINATURAS",left+4,y+6);y+=14;
       const sigW=80,sigH=29;
       if(tech){doc.setFillColor(...PALE);doc.roundedRect(left,y,sigW,sigH,2,2,"F");try{doc.addImage(tech,"PNG",left+4,y+1,sigW-8,18);}catch(e){}doc.setDrawColor(...GREEN);doc.line(left+5,y+20,left+sigW-5,y+20);doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("Técnico responsável",left+sigW/2,y+26,{align:"center"});}
