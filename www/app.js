@@ -2056,7 +2056,7 @@ const fotosDepois=(
 
 if(fotosAntes.length || fotosDepois.length){
   const photoW=83;
-  const photoH=100;
+  const photoH=90;
   const gap=12;
 
   for(const [titulo,fotos] of [
@@ -2068,8 +2068,8 @@ if(!fotos.length)continue;
 
 
 const alturaFotos=fotos.length===3
-  ? 236
-  : 126;
+  ? 216
+  : 116;
 
 const limiteFotos=278;
 
