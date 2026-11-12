@@ -2071,11 +2071,11 @@ const alturaFotos=fotos.length===3
   ? 236
   : 126;
 
-if(y+alturaFotos>278){
+const limiteFotos=278;
+
+if(y+alturaFotos>limiteFotos){
   newPage();
 }
-
-
     doc.setFillColor(...GREEN);
     doc.roundedRect(left,y,width,9,1.5,1.5,"F");
     doc.setTextColor(...WHITE);
@@ -2126,8 +2126,7 @@ for(let i=0;i<fotos.length;i++){
       }
     }
 
-    
-y=inicioFotos+(fotos.length===3 ? 2*photoH+10 : photoH)+10;
+    y=inicioFotos+(fotos.length===3 ? 2*photoH+10 : photoH)+10;
   }
 }
     const tech=o.technicianSignature||state.settings.technicianSignature;
