@@ -31,6 +31,19 @@ const DEFAULT={
 };
 let state=loadState(),view="dashboard",query="",filter="Todos",modalHandler=null,pads={};
 
+function loadLicense(){
+  try{
+    const saved=localStorage.getItem(LICENSE_KEY);
+    if(saved){
+      const data=JSON.parse(saved);
+      return {...LICENSE_DEFAULT,...data};
+    }
+  }catch(e){
+    console.warn("Erro ao carregar licença:",e);
+  }
+
+  return {...LICENSE_DEFAULT};
+}
 function loadState(){
   try{
     const saved=localStorage.getItem(KEY);
