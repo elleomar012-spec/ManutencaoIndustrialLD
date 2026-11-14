@@ -50,6 +50,38 @@ function loadLicense(){
 
   return {...LICENSE_DEFAULT};
 }
+function saveLicense(){
+  try{
+    localStorage.setItem(
+      LICENSE_KEY,
+      JSON.stringify(license)
+    );
+    return true;
+  }catch(e){
+    console.error("Erro ao salvar licença:",e);
+    return false;
+  }
+}
+
+function getTrialDaysRemaining(){
+  if(!license.trialExpiresAt){
+    return 0;
+  }
+
+  const expires=new Date(license.trialExpiresAt).getTime();
+
+  if(!Number.isFinite(expires)){
+    return 0;
+  }
+
+  const remaining=expires-Date.now();
+
+  return Math.max(
+    0,
+    Math.ceil(remaining/(24*60*60*1000))
+  );
+}
+
 function loadState(){
   try{
     const saved=localStorage.getItem(KEY);
