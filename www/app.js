@@ -1,6 +1,15 @@
 (() => {
 "use strict";
-const KEY="ld_manutencao_industrial_v3";
+const KEY="ld_manutencao_industrial_v3";  
+const LICENSE_KEY="ld_manutencao_industrial_license_v1";
+const LICENSE_DEFAULT={
+  status:"not_started",
+  trialStartedAt:null,
+  trialExpiresAt:null,
+  activatedAt:null,
+  licenseCode:null,
+  deviceId:null
+}; 
 const OLD_KEYS=["manutencaoIndustrialLD_equipamentos","ld_manutencao_industrial_v1"];
 const DEFAULT={
   assets:[],
