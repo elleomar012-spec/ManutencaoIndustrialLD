@@ -29,7 +29,13 @@ const DEFAULT={
   nextAsset:1,
   nextOrder:1
 };
-let state=loadState(),view="dashboard",query="",filter="Todos",modalHandler=null,pads={};
+let state=loadState(),
+    license=loadLicense(),
+    view="dashboard",
+    query="",
+    filter="Todos",
+    modalHandler=null,
+    pads={};
 
 function loadLicense(){
   try{
