@@ -82,6 +82,28 @@ function getTrialDaysRemaining(){
   );
 }
 
+function startFreeTrial(){
+  if(license.status!=="not_started"){
+    return false;
+  }
+
+  const now=Date.now();
+  const sevenDays=7*24*60*60*1000;
+
+  const previousLicense={...license};
+
+  license.trialStartedAt=new Date(now).toISOString();
+  license.trialExpiresAt=new Date(now+sevenDays).toISOString();
+  license.status="trial";
+
+  if(!saveLicense()){
+    license=previousLicense;
+    return false;
+  }
+
+  return true;
+}
+
 function loadState(){
   try{
     const saved=localStorage.getItem(KEY);
