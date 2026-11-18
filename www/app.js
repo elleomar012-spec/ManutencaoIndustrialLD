@@ -117,8 +117,8 @@ function getLicenseStatus(){
     const expires=new Date(license.trialExpiresAt).getTime();
 
     
-    if(Number.isFinite(expires) && (Date.now()+8*24*60*60*1000)<expires){
-      return "trial";
+   if(Number.isFinite(expires) && Date.now()<expires){
+      return "trial"; 
     }
 
     return "expired";
