@@ -192,6 +192,16 @@ function licenseView(){
         border-radius:8px;">
         Ativar licença
       </button>
+      
+       ${status==="trial" ? `
+        <button id="backToAppBtn"
+          style="width:100%;padding:12px;
+          margin-top:10px;background:#e5e7eb;
+          color:#374151;border:0;
+          border-radius:8px;">
+          Voltar ao aplicativo
+        </button>
+      ` : ""}
 
       <p style="font-size:12px;color:#666;">
         LD Automação e Soluções Industriais
@@ -214,6 +224,15 @@ function bindLicenseView(){
       }
     });
   }
+  
+  const backBtn=document.getElementById("backToAppBtn");
+
+  if(backBtn){
+    backBtn.addEventListener("click",()=>{
+      render();
+    });
+  }
+
 }
 
 function loadState(){
