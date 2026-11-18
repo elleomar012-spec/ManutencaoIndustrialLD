@@ -104,6 +104,28 @@ function startFreeTrial(){
   return true;
 }
 
+function getLicenseStatus(){
+  if(license.status==="activated"){
+    return "activated";
+  }
+
+  if(license.status==="not_started"){
+    return "not_started";
+  }
+
+  if(license.status==="trial"){
+    const expires=new Date(license.trialExpiresAt).getTime();
+
+    if(Number.isFinite(expires) && Date.now()<expires){
+      return "trial";
+    }
+
+    return "expired";
+  }
+
+  return "expired";
+}
+
 function loadState(){
   try{
     const saved=localStorage.getItem(KEY);
