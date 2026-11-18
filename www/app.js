@@ -282,11 +282,35 @@ function render(){
         font-size:13px;
         font-weight:bold;">
         ${getLicenseMessage()}
+
+        <button id="openLicenseBtn"
+          style="display:block;width:100%;
+          margin-top:8px;padding:8px;
+          background:#166534;color:white;
+          border:0;border-radius:6px;">
+          Ativar minha licença
+        </button>
       </div>
+
     `);
   }
 
   bind();
+  
+  const openLicenseBtn=document.getElementById("openLicenseBtn");
+
+  if(openLicenseBtn){
+    openLicenseBtn.addEventListener("click",()=>{
+      document.querySelectorAll(".tab").forEach(b=>{
+        b.style.display="none";
+      });
+
+      root.innerHTML=licenseView();
+
+      bindLicenseView();
+    });
+  }
+
 }
 function dashboard(){
   const open=state.orders.filter(o=>o.status!=="Concluída").length;
