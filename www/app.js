@@ -232,6 +232,21 @@ function bindLicenseView(){
       render();
     });
   }
+  
+  const activateBtn=document.getElementById("activateLicenseBtn");
+
+  if(activateBtn){
+    activateBtn.addEventListener("click",()=>{
+      const code=document.getElementById("licenseCodeInput")?.value?.trim() || "";
+
+      if(!code){
+        alert("Digite seu código de ativação.");
+        return;
+      }
+
+      alert("A ativação online ainda está em desenvolvimento.");
+    });
+  }
 
 }
 
