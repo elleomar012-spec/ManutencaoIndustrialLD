@@ -2645,5 +2645,12 @@ document.getElementById("modalForm").addEventListener("submit",async e=>{
   catch(err){console.error(err);alert(err.message||"Não foi possível salvar os dados.");}
 });
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;query="";filter="Todos";render();}));
-render();
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible"){
+    if(!canUseApp()){
+      render();
+    }
+  }
+});
+  render();
 })();
