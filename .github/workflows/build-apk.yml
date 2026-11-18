@@ -1,12 +1,13 @@
 
 
-name: Build Manutenção Industrial LD V2 TESTE
+name: Build Manutenção Industrial LD V2.9 BETA
+
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - v2.3
+      - v2.9
 
 jobs:
   build:
@@ -58,6 +59,16 @@ jobs:
 
       - name: Criar projeto Android
         run: npx cap add android
+        
+      - name: Verificar identidade Android V2.9 Beta
+        run: |
+          grep -Eq 'applicationId[[:space:]]+"br\.com\.ldautomacao\.manutencaoindustrial\.v29beta"' android/app/build.gradle || {
+            echo "::error::Identificador nativo Android incorreto"
+            exit 1
+          }
+
+          echo "Identidade exclusiva V2.9 Beta confirmada!"
+
 
       - name: Aplicar icone oficial LD
         run: |
@@ -142,7 +153,7 @@ jobs:
           )
           conteudo, alteracoes_nome = re.subn(
               r'\bversionName\s+["\'][^"\']+["\']',
-              'versionName "2.3.0"',
+              'versionName "2.9.0"',
               conteudo,
               count=1
           )
@@ -187,9 +198,10 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleRelease
 
-      - name: Disponibilizar APK V2 assinado
+      
+      - name: Disponibilizar APK V2.9 Beta assinado
         uses: actions/upload-artifact@v4
         with:
-          name: manutencao-industrial-ld-v22-assinado
+          name: manutencao-industrial-ld-v29-beta-assinado
           path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
