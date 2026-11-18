@@ -242,6 +242,21 @@ function pill(s){return `<span class="pill ${statusClass(s)}">${esc(s)}</span>`;
 function assetById(id){return state.assets.find(a=>String(a.id)===String(id));}
 function orderAsset(o){return assetById(o.assetId)?.name||"Equipamento não encontrado";}
 function render(){
+  if(!canUseApp()){
+    document.querySelectorAll(".tab").forEach(b=>{
+      b.style.display="none";
+    });
+
+    document.getElementById("app").innerHTML=licenseView();
+
+    bindLicenseView();
+    return;
+  }
+
+  document.querySelectorAll(".tab").forEach(b=>{
+    b.style.display="";
+  });
+
   document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
 
   const root=document.getElementById("app");
@@ -254,6 +269,22 @@ function render(){
     view==="calendar"?calendarView():
     view==="reports"?reportsView():
     settingsView();
+
+  if(getLicenseStatus()==="trial"){
+    root.insertAdjacentHTML("afterbegin",`
+      <div style="background:#fff7ed;
+        border:1px solid #fdba74;
+        color:#9a3412;
+        padding:12px;
+        margin-bottom:12px;
+        border-radius:8px;
+        text-align:center;
+        font-size:13px;
+        font-weight:bold;">
+        ${getLicenseMessage()}
+      </div>
+    `);
+  }
 
   bind();
 }
