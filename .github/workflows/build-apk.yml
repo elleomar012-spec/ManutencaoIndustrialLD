@@ -17,9 +17,9 @@ jobs:
       - name: Baixar arquivos da branch V2
         uses: actions/checkout@v4
 
-      - name: Conferir base V2
+      - name: Conferir base V2.9 Beta
         run: |
-          echo "Conferindo arquivos da V2.0..."
+          echo "Conferindo arquivos da V2.9 Beta..."
           for arquivo in \
             www/index.html \
             www/app.js \
