@@ -126,6 +126,96 @@ function getLicenseStatus(){
   return "expired";
 }
 
+function canUseApp(){
+  const status=getLicenseStatus();
+
+  return status==="trial" || status==="activated";
+}
+
+function getLicenseMessage(){
+  const status=getLicenseStatus();
+
+  if(status==="activated"){
+    return "Licença vitalícia ativada";
+  }
+
+  if(status==="trial"){
+    const days=getTrialDaysRemaining();
+
+    return days===1
+      ? "Resta 1 dia de teste gratuito"
+      : `Restam ${days} dias de teste gratuito`;
+  }
+
+  if(status==="not_started"){
+    return "Experimente grátis por 7 dias";
+  }
+
+  return "Seu período de teste terminou";
+}
+
+function licenseView(){
+  const status=getLicenseStatus();
+
+  return `
+    <div style="max-width:420px;margin:30px auto;
+      padding:24px;text-align:center;">
+
+      <h2>Gestão de Manutenção Industrial LD</h2>
+
+      <p style="color:#666;">
+        Sistema profissional de gestão de manutenção
+      </p>
+
+      <h3>${getLicenseMessage()}</h3>
+
+      ${status==="not_started" ? `
+        <button id="startTrialBtn"
+          style="width:100%;padding:14px;margin:10px 0;
+          background:#166534;color:white;border:0;
+          border-radius:8px;">
+          Iniciar teste gratuito
+        </button>
+      ` : ""}
+
+      <p>Já possui uma licença?</p>
+
+      <input id="licenseCodeInput"
+        type="text"
+        placeholder="Digite seu código de ativação"
+        style="width:100%;padding:12px;
+        box-sizing:border-box;margin-bottom:12px;">
+
+      <button id="activateLicenseBtn"
+        style="width:100%;padding:14px;
+        background:#166534;color:white;border:0;
+        border-radius:8px;">
+        Ativar licença
+      </button>
+
+      <p style="font-size:12px;color:#666;">
+        LD Automação e Soluções Industriais
+      </p>
+
+    </div>
+  `;
+}
+
+function bindLicenseView(){
+  const startBtn=document.getElementById("startTrialBtn");
+
+  if(startBtn){
+    startBtn.addEventListener("click",()=>{
+      if(startFreeTrial()){
+        alert("Seu período de teste gratuito de 7 dias foi iniciado!");
+        render();
+      }else{
+        alert("Não foi possível iniciar o período de teste.");
+      }
+    });
+  }
+}
+
 function loadState(){
   try{
     const saved=localStorage.getItem(KEY);
