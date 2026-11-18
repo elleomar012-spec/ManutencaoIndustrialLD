@@ -34,14 +34,16 @@ jobs:
               echo "::error::ARQUIVO AUSENTE: $arquivo"
               exit 1
             fi
+          
           done
 
-          grep -q 'br.com.ldautomacao.manutencaoindustrial.v2teste' capacitor.config.json || {
-            echo "::error::Identificador Android da V2 incorreto"
+          grep -Fq '"appId": "br.com.ldautomacao.manutencaoindustrial.v29beta"' capacitor.config.json || {
+            echo "::error::Identificador Android da V2.9 Beta incorreto"
             exit 1
           }
 
-          echo "Base V2 conferida com sucesso!"
+          echo "Base V2.9 Beta conferida com sucesso!"
+
 
       - name: Configurar Node
         uses: actions/setup-node@v4
